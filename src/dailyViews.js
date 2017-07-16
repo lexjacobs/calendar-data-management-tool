@@ -5,7 +5,7 @@ import database from './database';
 
 export default function dailyViews(start, end){
   var CURRENT = start;
-  var dailyDatabase = new Backbone.Collection();
+  var collectionOfEventsByFullDate = new Backbone.Collection();
 
   while (end.diff(CURRENT, "days") >= 0) {
 
@@ -30,13 +30,13 @@ export default function dailyViews(start, end){
       }
     });
 
-    dailyDatabase.add({
+    collectionOfEventsByFullDate.add({
       events: result,
       date: moment(CURRENT.clone())
     })
     CURRENT = CURRENT.add(1, "d");
   }
 
-  return dailyDatabase;
+  return collectionOfEventsByFullDate;
 
 }
