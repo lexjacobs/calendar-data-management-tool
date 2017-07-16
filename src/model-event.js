@@ -38,6 +38,14 @@ const eventModel = Backbone.Model.extend({
         }
       }
 
+      // map month only for banner occurrences
+      if (repetition === 'banner') {
+        let dateObject = moment(x, 'M');
+        return {
+          m: +dateObject.month() + 1
+        }
+      }
+
     })
 
     this.set('occurrences', mappedOccurrences);
