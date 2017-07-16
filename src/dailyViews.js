@@ -11,14 +11,14 @@ export default function dailyViews(start, end) {
 
     var result = database.models.filter(x => {
       if (x.get('repeat') === 'annual') {
-        return _.filter(x.get('occurrences'), instance => {
+        return _.filter(x.get('timing'), instance => {
           return _.where([instance], {
             d: +CURRENT.date(),
             m: +CURRENT.month() + 1
           }).length;
         }).length;
-      } else if (x.get('repeat') === 'irregular') {
-        return _.filter(x.get('occurrences'), instance => {
+      } else if (x.get('repeat') === 'once') {
+        return _.filter(x.get('timing'), instance => {
           return _.where([instance], {
             d: +CURRENT.date(),
             m: +CURRENT.month() + 1,
@@ -29,7 +29,7 @@ export default function dailyViews(start, end) {
 
         if (+CURRENT.date() !== 1) return null;
 
-        return _.filter(x.get('occurrences'), instance => {
+        return _.filter(x.get('timing'), instance => {
           return _.where([instance], {
             m: +CURRENT.month() + 1
           }).length;

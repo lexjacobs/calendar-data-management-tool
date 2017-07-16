@@ -3,24 +3,29 @@ import moment from 'moment';
 window.moment = moment;
 
 /*
-maps from occurrences: ['2016-9-1','2016-9-2'] ==>
-occurrences: [{ m: 9, d: 1, y: 2016 }, { m: 9, d: 2, y: 2016 }]
+maps from timing: ['2016-9-1','2016-9-2'] ==>
+timing: [{ m: 9, d: 1, y: 2016 }, { m: 9, d: 2, y: 2016 }]
 
 -or
 
 ['9-1'] ==>
-occurrences: [{ m: 9, d: 1 }]
+timing: [{ m: 9, d: 1 }]
+
+-or
+
+['9'] ==>
+timing: [{ m: 9 }]
 
  */
 
 const eventModel = Backbone.Model.extend({
   initialize(){
 
-    let mappedOccurrences = this.get('occurrences').map(x => {
+    let mappedTiming = this.get('timing').map(x => {
       let repetition = this.get('repeat');
 
       // map a month, day, year
-      if (repetition === 'irregular') {
+      if (repetition === 'once') {
         let dateObject = moment(x, 'YYYY-M-D');
         return {
           m: +dateObject.month() + 1,
@@ -48,7 +53,7 @@ const eventModel = Backbone.Model.extend({
 
     })
 
-    this.set('occurrences', mappedOccurrences);
+    this.set('timing', mappedTiming);
   }
 });
 
