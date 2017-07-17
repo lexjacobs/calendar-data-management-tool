@@ -1,8 +1,7 @@
 // IMPORTANT: year-month-day OR month-day OR month!!!
 import { annual, banner, bars, full, once } from './constants';
 
-const dataset = [
-  
+const bannerEvents = [
   {
     text: "SEPTEMBER / Birthstone: Sapphire / Flower: Aster",
     timing: ['9'],
@@ -12,18 +11,24 @@ const dataset = [
     text: "*NATIONAL HISPANIC HERITAGE MONTH (September 15 - October 15)",
     timing: ['9'],
     repeat: banner
-  },
+  }
+];
+
+const annualEvents = [
+  {
+    text: "Ecclesiastical Year Begins - Greek Orthodox",
+    timing: ['9-1'],
+    repeat: annual
+  }
+];
+
+const onceEvents = [
   {
     text:
       "ASSISTANT PRINCIPALS, SCHOOL-BASED INTERMEDIATE SUPERVISORS REPORT, SCHOOL-BASED INTERMEDIATE SUPERVISORS REPORT",
     timing: ['2016-9-1','2016-9-2'],
     repeat: once,
     shading: bars
-  },
-  {
-    text: "Ecclesiastical Year Begins - Greek Orthodox",
-    timing: ['9-1'],
-    repeat: annual
   },
   {
     text: "NEW MOON",
@@ -45,4 +50,5 @@ const dataset = [
   }
 ];
 
+const dataset = [].concat(bannerEvents).concat(annualEvents).concat(onceEvents);
 export default dataset;
