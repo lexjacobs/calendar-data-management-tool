@@ -19,6 +19,6 @@ database.add({
 
 // test: change the event timing
 var e = database.where({'text': 'this is a special added event after'})[0];
-// e.set({'timing': e.get('timing').concat({y:2016, d:18, m:9})})
+e.addNewTiming(['2016-9-15']);
 
 export default database;

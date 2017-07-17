@@ -25,7 +25,13 @@ const eventModel = Backbone.Model.extend({
     // into a Backbone Collection, with
     // mapped date strings => objects, as above
     this.set('timing', new Backbone.Collection(this.get('timing').map(x => timingMapper(x, this.get('repeat')))));
+
   },
+
+  // method for adding string timings after initialization
+  addNewTiming(date) {
+    this.get('timing').add(timingMapper(date, this.get('repeat')));
+  }
 });
 
 export function timingMapper(dateString, repetition) {
