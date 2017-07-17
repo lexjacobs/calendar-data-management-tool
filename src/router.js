@@ -6,7 +6,8 @@ import { EventsView } from './view-events';
 var ViewManager = {
     currentView : null,
     showView : function(view) {
-        if (this.currentView !== null && this.currentView.cid != view.cid) {
+        if (this.currentView !== null && this.currentView.cid !== view.cid) {
+            this.currentView.stopListening();
             this.currentView.remove();
         }
         this.currentView = view;
