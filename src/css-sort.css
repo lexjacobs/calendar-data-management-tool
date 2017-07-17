@@ -1,0 +1,9 @@
+.items {
+  margin: 5px 0;
+  padding: 10px;
+  border: 1px solid;
+}
+
+.shading {
+  background-color: lightblue;
+}
