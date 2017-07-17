@@ -20,7 +20,11 @@ timing: [{ m: 9 }]
 
 const eventModel = Backbone.Model.extend({
   initialize() {
-    this.set('timing', this.get('timing').map(x => timingMapper(x, this.get('repeat'))));
+
+    // map to transform seed database 'timing' array
+    // into a Backbone Collection, with
+    // mapped date strings => objects, as above
+    this.set('timing', new Backbone.Collection(this.get('timing').map(x => timingMapper(x, this.get('repeat')))));
   },
 });
 

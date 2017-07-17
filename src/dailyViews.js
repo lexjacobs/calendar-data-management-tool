@@ -23,8 +23,8 @@ export default function dailyViews(start, end) {
       if (x.get('repeat') === 'annual') {
 
         // include it if the day and month match
-        return _.filter(x.get('timing'), instance => {
-          return _.where([instance], {
+        return _.filter(x.get('timing').models, instance => {
+          return _.where(instance, {
             d: +CURRENT.date(),
             m: +CURRENT.month() + 1
           }).length;
@@ -32,10 +32,9 @@ export default function dailyViews(start, end) {
 
       // if the next model is a singular event
       } else if (x.get('repeat') === 'once') {
-
         // include it if the day/month/year match
-        return _.filter(x.get('timing'), instance => {
-          return _.where([instance], {
+        return _.filter(x.get('timing').models, instance => {
+          return _.where(instance, {
             d: +CURRENT.date(),
             m: +CURRENT.month() + 1,
             y: +CURRENT.year()
@@ -49,8 +48,8 @@ export default function dailyViews(start, end) {
         if (+CURRENT.date() !== 1) return null;
 
         // and if the current month matches
-        return _.filter(x.get('timing'), instance => {
-          return _.where([instance], {
+        return _.filter(x.get('timing').models, instance => {
+          return _.where(instance, {
             m: +CURRENT.month() + 1
           }).length;
         }).length;
