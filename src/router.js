@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import Backbone from 'backbone';
-import { HomeView, EventsView } from './view-home';
+import { SortView } from './view-sort';
+import { EventsView } from './view-events';
 
 var ViewManager = {
     currentView : null,
@@ -15,13 +16,13 @@ var ViewManager = {
 
 const applicationRouter = Backbone.Router.extend({
   routes: {
-    "home": "home",
+    "sort": "sort",
     "events": "events",
     "*default": "home"
   },
 
-  home() {
-    $('#root').html(ViewManager.showView(HomeView))
+  sort() {
+    $('#root').html(ViewManager.showView(SortView))
   },
 
   events() {
