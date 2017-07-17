@@ -1,7 +1,7 @@
 import Backbone from 'backbone';
 import _ from 'underscore';
 import moment from 'moment';
-import database from './database';
+import database from './collection-database';
 
 export default function dailyViews(start, end) {
   var CURRENT = start;
