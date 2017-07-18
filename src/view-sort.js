@@ -41,11 +41,32 @@ const SortedViews = Backbone.View.extend({
   render() {
     this.$el.html('');
     this.collection &&  this.collection.models.forEach(x => {
-      this.$el.append(`<br>${x.get('date').format('MMM DD, YYYY ddd')} <br>`);
 
-      this.$el.append(new ItemView({
-        collection: new Backbone.Collection(x.get('events'))
-      }).el);
+      // on the first of the month, split out banner events and render first
+      if (x.get('date').date() === 1) {
+        let events = new Backbone.Collection(x.get('events'));
+
+        this.$el.append(`<div style="font-size:20px;">${x.get('date').format('MMMM')} heading:</div>`)
+        this.$el.append(new ItemView({
+          collection: new Backbone.Collection(events.where({repeat: 'banner'}))
+        }).el);
+
+        this.$el.append(`<br>${x.get('date').format('MMM DD, YYYY ddd')} <br>`);
+
+        this.$el.append(new ItemView({
+          collection: new Backbone.Collection(events.reject({repeat: 'banner'}))
+        }).el);
+
+      // on other days just render the events of that day
+      } else {
+
+        // append event block date
+        this.$el.append(`<br>${x.get('date').format('MMM DD, YYYY ddd')} <br>`);
+
+        this.$el.append(new ItemView({
+          collection: new Backbone.Collection(x.get('events'))
+        }).el);
+      }
 
       // log all events
       // x.get('events').forEach(x => {
