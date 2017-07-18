@@ -41,7 +41,7 @@ const SortedViews = Backbone.View.extend({
   render() {
     this.$el.html('');
     this.collection &&  this.collection.models.forEach(x => {
-      this.$el.append(`<br>${x.get('date').calendar()} <br>`);
+      this.$el.append(`<br>${x.get('date').format('MMM DD, YYYY ddd')} <br>`);
 
       this.$el.append(new ItemView({
         collection: new Backbone.Collection(x.get('events'))
@@ -81,7 +81,7 @@ const DatePicker = Backbone.View.extend({
     `<form>
     <label>Choose the year to display, from September through the following September:</label>
     <br>
-    <input class="num-year" placeholder="" type="number" value=${START} /></input>
+    <input class="num-year" placeholder="school calendar year" min="1" type="number" value=${START} /></input>
     <br>
     <button class='num-button' type='submit'>submit</button>
     </form>`
@@ -98,9 +98,9 @@ const ItemView = Backbone.View.extend({
     // check for any instance of shading
     if (this.checkFor('shading')) this.$el.addClass('shading');
 
-    if (this.checkFor('asp')) this.$el.append(`<div class="asp"></div>`);
+    if (this.checkFor('asp')) this.$el.append(`<span class="asp"></span>`);
 
-    if (this.checkFor('mlh')) this.$el.append(`<div class="mlh"></div>`);
+    if (this.checkFor('mlh')) this.$el.append(`<span class="mlh"></span>`);
 
 
     this.render();
@@ -112,7 +112,7 @@ const ItemView = Backbone.View.extend({
   },
   className: 'items',
   tagName: 'div',
-  template: _.template('<%= text %><br>'),
+  template: _.template('<span class="individual-sorted-item"><%= text %><br></span>'),
   render() {
     this.collection.models.forEach(x => {
       this.$el.append(this.template(x.attributes));

@@ -3,6 +3,11 @@ import { annual, banner, bars, full, once } from './constants';
 
 const bannerEvents = [
   {
+    text: "inset box: 'ASSISTANT PRINCIPALS, & SCHOOL-BASED INTERMEDIATE SUPERVISORS REPORTED AUGUST xxth ??'",
+    timing: ['9'],
+    repeat: banner
+  },
+  {
     text: "SEPTEMBER / Birthstone: Sapphire / Flower: Aster",
     timing: ['9'],
     repeat: banner

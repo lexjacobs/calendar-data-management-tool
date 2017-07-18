@@ -5,13 +5,22 @@
 }
 
 .asp::after {
+  display: inline;
   content: 'ASP: OFF';
+  padding-right: 10px;
 }
 
 .mlh::after {
+  display: inline;
   content: 'MLH: ON';
+  padding-right: 10px;
 }
 
 .shading {
   background-color: lightblue;
+}
+
+.individual-sorted-item {
+  padding: 5px 0;
+  display: block;
 }
