@@ -4,6 +4,14 @@
   border: 1px solid;
 }
 
+.asp::after {
+  content: 'ASP: OFF';
+}
+
+.mlh::after {
+  content: 'MLH: ON';
+}
+
 .shading {
   background-color: lightblue;
 }

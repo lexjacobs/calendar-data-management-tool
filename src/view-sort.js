@@ -5,8 +5,7 @@ import moment from 'moment';
 import dailyViews from './dailyViews'
 import './css-sort.css';
 
-var START = "2016-08-30";
-var END = "2016-09-23";
+var START = moment().year()-1;
 
 export const SortView = Backbone.View.extend({
   initialize() {
@@ -14,9 +13,6 @@ export const SortView = Backbone.View.extend({
   },
   tagName: 'div',
   render() {
-
-    this.$el.append(`Sorted View<br>`);
-
     this.datePicker = new DatePicker();
     this.sortedViews = new SortedViews();
     this.$el.append(this.datePicker.el);
@@ -51,9 +47,10 @@ const SortedViews = Backbone.View.extend({
         collection: new Backbone.Collection(x.get('events'))
       }).el);
 
-      x.get('events').forEach(x => {
-        // console.log(_.values(_.omit(x.attributes, ['occurrences', 'repeat', 'shading', 'mlh', 'asp'])));
-      })
+      // log all events
+      // x.get('events').forEach(x => {
+      //   console.log(_.values(_.omit(x.attributes, ['occurrences', 'repeat', 'shading', 'mlh', 'asp'])));
+      // })
 
       return this;
     })
@@ -73,16 +70,19 @@ const DatePicker = Backbone.View.extend({
     'submit': "setStartEnd",
   },
   setStartEnd(e) {
+    let start = $('.num-year').val();
     e.preventDefault();
     this.model.set({
-      'start': $('.num-start').val(),
-      'end': $('.num-end').val()
+      'start': `${start}-09-01`,
+      'end': `${+start+1}-09-01`
     });
   },
   template: _.template(
     `<form>
-    <input class="num-start" placeholder="from" type="text" value=${START} />
-    <input class="num-end" placeholder="to" type="text" value=${END} />
+    <label>Choose the year to display, from September through the following September:</label>
+    <br>
+    <input class="num-year" placeholder="" type="number" value=${START} /></input>
+    <br>
     <button class='num-button' type='submit'>submit</button>
     </form>`
   ),
@@ -97,6 +97,11 @@ const ItemView = Backbone.View.extend({
 
     // check for any instance of shading
     if (this.checkFor('shading')) this.$el.addClass('shading');
+
+    if (this.checkFor('asp')) this.$el.append(`<div class="asp"></div>`);
+
+    if (this.checkFor('mlh')) this.$el.append(`<div class="mlh"></div>`);
+
 
     this.render();
   },
