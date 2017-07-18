@@ -1,8 +1,12 @@
 import Backbone from 'backbone';
+import $ from 'jquery';
 import _ from 'underscore';
 import moment from 'moment';
 import dailyViews from './dailyViews'
 import './css-sort.css';
+
+var START = "2016-08-30";
+var END = "2016-09-23";
 
 export const SortView = Backbone.View.extend({
   initialize() {
@@ -11,25 +15,79 @@ export const SortView = Backbone.View.extend({
   tagName: 'div',
   render() {
 
-    this.$el.append(`Sorted View<br>`)
+    this.$el.append(`Sorted View<br>`);
 
-    var START = moment("2016-08-30");
-    var END = moment("2016-09-23");
+    this.datePicker = new DatePicker();
+    this.sortedViews = new SortedViews();
+    this.$el.append(this.datePicker.el);
+    this.$el.append(this.sortedViews.el);
 
-    var sortedDailyViews = dailyViews(START, END);
+    this.listenTo(this.datePicker, 'dateUpdated', this.retrigger);
 
-    sortedDailyViews.models.forEach(x => {
+    return this;
+  },
+  generateDailyViews(start, end) {
+    return dailyViews(moment(start), moment(end));
+  },
+  retrigger() {
+    let start = this.datePicker.model.get('start');
+    let end = this.datePicker.model.get('end');
+    this.sortedViews.collection = this.generateDailyViews(start, end);
+    this.sortedViews.trigger('renderAgain');
+  }
+});
+
+const SortedViews = Backbone.View.extend({
+  initialize() {
+    this.render();
+    this.listenTo(this, 'renderAgain', this.render);
+  },
+  render() {
+    this.$el.html('');
+    this.collection &&  this.collection.models.forEach(x => {
       this.$el.append(`<br>${x.get('date').calendar()} <br>`);
 
       this.$el.append(new ItemView({
         collection: new Backbone.Collection(x.get('events'))
-      }).el)
+      }).el);
 
       x.get('events').forEach(x => {
-        console.log(_.values(_.omit(x.attributes, ['occurrences', 'repeat', 'shading', 'mlh', 'asp'])));
+        // console.log(_.values(_.omit(x.attributes, ['occurrences', 'repeat', 'shading', 'mlh', 'asp'])));
       })
-    })
 
+      return this;
+    })
+  }
+});
+
+const DatePicker = Backbone.View.extend({
+  initialize() {
+    this.model = new Backbone.Model();
+    this.listenTo(this.model, 'change', this.announce);
+    this.render();
+  },
+  announce() {
+    this.trigger('dateUpdated');
+  },
+  events: {
+    'submit': "setStartEnd",
+  },
+  setStartEnd(e) {
+    e.preventDefault();
+    this.model.set({
+      'start': $('.num-start').val(),
+      'end': $('.num-end').val()
+    });
+  },
+  template: _.template(
+    `<form>
+    <input class="num-start" placeholder="from" type="text" value=${START} />
+    <input class="num-end" placeholder="to" type="text" value=${END} />
+    <button class='num-button' type='submit'>submit</button>
+    </form>`
+  ),
+  render() {
+    this.$el.html(this.template());
     return this;
   }
 });
@@ -38,11 +96,14 @@ const ItemView = Backbone.View.extend({
   initialize(options) {
 
     // check for any instance of shading
-    if (options.collection.models.filter(x => {
-        return x.get('shading') !== undefined;
-      }).length) this.$el.addClass('shading');
+    if (this.checkFor('shading')) this.$el.addClass('shading');
 
     this.render();
+  },
+  checkFor(attr) {
+    return this.collection.models.filter(x => {
+      return x.get(attr) !== undefined;
+    }).length;
   },
   className: 'items',
   tagName: 'div',
