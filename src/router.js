@@ -24,7 +24,6 @@ const applicationRouter = Backbone.Router.extend({
 
   sort() {
     $('#root').html(ViewManager.showView(SortView))
-    $('button').click();
   },
 
   events() {

@@ -56,4 +56,8 @@ const onceEvents = [
 ];
 
 const dataset = [].concat(bannerEvents).concat(annualEvents).concat(onceEvents);
+
+// var events = Firebase.database().ref('events');
+// events.set(dataset);
+
 export default dataset;

@@ -118,16 +118,20 @@ const ItemView = Backbone.View.extend({
     // check for any instance of shading
     if (this.checkFor('shading')) this.$el.addClass('shading');
 
-    if (this.checkFor('asp')) this.$el.append(`<span class="asp"></span>`);
+    if (this.checkFor('asp', true)) this.$el.append(`<span class="asp"></span>`);
 
-    if (this.checkFor('mlh')) this.$el.append(`<span class="mlh"></span>`);
+    if (this.checkFor('mlh', true)) this.$el.append(`<span class="mlh"></span>`);
 
 
     this.render();
   },
-  checkFor(attr) {
+  checkFor(attr, target) {
     return this.collection.models.filter(x => {
-      return x.get(attr) !== undefined;
+      // works for any shading, but only 'true' for asp/mlh
+      if (target === undefined) {
+        return x.get(attr) !== undefined;
+      }
+      return x.get(attr) === target;
     }).length;
   },
   className: 'items',

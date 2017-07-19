@@ -1,12 +1,14 @@
 import Backbone from 'backbone';
-import $ from 'jquery';
-import _ from 'underscore';
-import moment from 'moment';
+// import $ from 'jquery';
+// import _ from 'underscore';
+// import moment from 'moment';
 import './css-sort.css';
 import database from './collection-database';
 
 export const EventsView = Backbone.View.extend({
   initialize() {
+    this.collection = database;
+    this.listenTo(this.collection, 'update', this.render);
     this.render();
   },
   render() {
@@ -22,6 +24,7 @@ const IndividualEventBlock = Backbone.View.extend({
     this.render();
   },
   render() {
+    this.$el.html('');
     this.collection.models.forEach(function(x) {
       this.$el.append(new IndividualEvent({
         model: x

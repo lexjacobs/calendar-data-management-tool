@@ -1,4 +1,5 @@
 import Backbone from 'backbone';
+// import _ from 'underscore';
 import moment from 'moment';
 window.moment = moment;
 
@@ -21,19 +22,24 @@ timing: [{ m: 9 }]
 const eventModel = Backbone.Model.extend({
   initialize() {
 
-    // map to transform seed database 'timing' array
+    // map to transform persisted 'timing' array
     // into a Backbone Collection, with
     // mapped date strings => objects, as above
-    this.set('timing', new Backbone.Collection(this.get('timing').map(x => timingMapper(x, this.get('repeat')))));
-
+    // NOT saving in attributes, but as a property
+    this.timing = new Backbone.Collection(this.get('timing').map(x => timingMapper(x, this.get('repeat'))));
   },
 
+  serializeTiming() {
+    this.set('timing', this.timing.toJSON());
+  },
   // method for adding string timings after initialization
   addNewTiming(date) {
-    this.get('timing').add(timingMapper(date, this.get('repeat')));
+    this.timing.add(timingMapper(date, this.get('repeat')));
+
+    // changes to collection need to be persisted to model attributes hash
+    this.serializeTiming();
     this.trigger('change', this);
-  },
-  url: '/model'
+  }
 });
 
 export function timingMapper(dateString, repetition) {
