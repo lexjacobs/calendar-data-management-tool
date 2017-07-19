@@ -57,12 +57,22 @@ const IndividualEvent = Backbone.View.extend({
     this.render();
     this.collection = database;
   },
-  events: {click: 'answer'},
+  className: 'individual-event-block',
+  events: {
+    'click .editButton': 'answer'
+  },
   answer(e) {
     console.log('heard click', this.model.cid, this.model.attributes);
   },
   render() {
-    this.$el.html(`${this.model.get('text')}`);
+    this.$el.html(`<span class="editButton"><button class='btn btn-sm'>edit</button> </span>
+    text: ${this.model.get('text')}<br>
+    timing: ${this.model.get('timing')}<br>
+    repeat: ${this.model.get('repeat')}<br>
+    mlh: ${this.model.get('mlh')}<br>
+    asp: ${this.model.get('asp')}<br>
+    shading: ${this.model.get('shading')}<br>
+    `);
     return this;
   }
 })

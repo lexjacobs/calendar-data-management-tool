@@ -2,3 +2,8 @@
   font-weight: bold;
   margin: 20px 0;
 }
+
+.individual-event-block {
+  border: 1px solid #000;
+  border-radius: 4px;
+}
