@@ -1,6 +1,6 @@
 .items {
   margin: 5px 0;
-  padding: 10px;
+  padding: 6px;
   border: 1px solid;
 }
 
@@ -23,4 +23,8 @@
 .individual-sorted-item {
   padding: 5px 0;
   display: block;
+}
+
+.sundown::before {
+  content: '•'
 }

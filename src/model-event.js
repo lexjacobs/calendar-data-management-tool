@@ -31,7 +31,9 @@ const eventModel = Backbone.Model.extend({
   // method for adding string timings after initialization
   addNewTiming(date) {
     this.get('timing').add(timingMapper(date, this.get('repeat')));
-  }
+    this.trigger('change', this);
+  },
+  url: '/model'
 });
 
 export function timingMapper(dateString, repetition) {

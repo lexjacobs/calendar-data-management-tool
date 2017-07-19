@@ -11,21 +11,20 @@ export const SortView = Backbone.View.extend({
   initialize() {
     this.render();
   },
-  tagName: 'div',
   render() {
     this.datePicker = new DatePicker();
     this.sortedViews = new SortedViews();
     this.$el.append(this.datePicker.el);
     this.$el.append(this.sortedViews.el);
 
-    this.listenTo(this.datePicker, 'dateUpdated', this.retrigger);
+    this.listenTo(this.datePicker, 'dateUpdated', this.redrawSortedViews);
 
     return this;
   },
   generateDailyViews(start, end) {
     return dailyViews(moment(start), moment(end));
   },
-  retrigger() {
+  redrawSortedViews() {
     let start = this.datePicker.model.get('start');
     let end = this.datePicker.model.get('end');
     this.sortedViews.collection = this.generateDailyViews(start, end);

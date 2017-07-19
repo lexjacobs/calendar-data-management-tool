@@ -2,6 +2,40 @@ import Backbone from 'backbone';
 import _ from 'underscore';
 import moment from 'moment';
 import database from './collection-database';
+import eventModel from './model-event';
+
+// test: add a new event
+// test: change the event timing
+
+database.add({
+  text: 'this is a special added event after',
+  timing: ['2016-9-18'],
+  repeat: 'once'
+})
+
+
+setTimeout(_ => {
+  console.log('timout');
+  database.at(-2).addNewTiming(['2016-9-15']);
+  database.add({
+    text: 'after delay test',
+    timing: ['2016-09-04'],
+    repeat: 'once'
+  })
+}, 2000)
+
+
+var test = new eventModel({
+  text: 'event model sample text',
+  timing: ['2016-09-03'],
+  repeat: 'once'
+})
+
+database.add(test);
+database.at(-1).set('text', 'event model sample text to')
+
+// end tests
+
 
 /*
  function to return a Backbone Collection that sorts events in date buckets.
