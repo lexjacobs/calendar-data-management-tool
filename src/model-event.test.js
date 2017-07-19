@@ -19,28 +19,28 @@ test('it properly transforms date arrays', () => {
     d: 5
   });
   dateString = '2019-3-5'
-  repetition = 'once'
+  repetition = 'variable'
   expect(timingMapper(dateString, repetition)).toEqual({
     m: 3,
     d: 5,
     y: 2019
   });
   dateString = '2019-13-5'
-  repetition = 'once'
+  repetition = 'variable'
   expect(timingMapper(dateString, repetition)).toEqual({
     m: NaN,
     d: NaN,
     y: NaN
   });
   dateString = '2019-9-31'
-  repetition = 'once'
+  repetition = 'variable'
   expect(timingMapper(dateString, repetition)).toEqual({
     m: NaN,
     d: NaN,
     y: NaN
   });
   dateString = '123-13-5'
-  repetition = 'once'
+  repetition = 'variable'
   expect(timingMapper(dateString, repetition)).toEqual({
     m: NaN,
     d: NaN,

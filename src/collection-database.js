@@ -15,7 +15,7 @@ var events = Firebase.database().ref('events');
 // var test = new eventModel({
 //   text: 'event model sample text',
 //   timing: ['2016-09-03'],
-//   repeat: 'once'
+//   repeat: 'variable'
 // })
 //
 // setTimeout(function () {

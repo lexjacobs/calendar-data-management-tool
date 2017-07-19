@@ -47,7 +47,7 @@ function extractEvents(start) {
       }).length;
 
       // if the next model is a singular event
-    } else if (x.get('repeat') === 'once') {
+    } else if (x.get('repeat') === 'variable') {
       // include it if the day/month/year match
       return _.filter(x.timing.models, instance => {
         return _.where(instance, {

@@ -45,7 +45,7 @@ const eventModel = Backbone.Model.extend({
 export function timingMapper(dateString, repetition) {
 
   // map a month, day, year
-  if (repetition === 'once') {
+  if (repetition === 'variable') {
     let dateObject = moment(dateString, 'YYYY-M-D');
     return {
       m: +dateObject.month() + 1,

@@ -90,7 +90,7 @@ const FilterChooser = Backbone.View.extend({
     this.trigger('filterClicked', clickTarget);
   },
   render() {
-    this.$el.html(`Filter by: <span data-repeat="annual">Annual events</span> | <span data-repeat="once">Changing Events</span> | <span data-repeat="banner">Month headings</span> | <span data-repeat="all">none</span>`);
+    this.$el.html(`Filter by: <span data-repeat="annual">Annual events</span> | <span data-repeat="variable">Changing Events</span> | <span data-repeat="banner">Month headings</span> | <span data-repeat="all">none</span>`);
     return this;
   }
 });

@@ -1,5 +1,5 @@
 // IMPORTANT: year-month-day OR month-day OR month!!!
-import { annual, banner, bars, full, once } from './constants';
+import { annual, banner, bars, full, variable } from './constants';
 import { Firebase } from './firebase';
 
 const bannerEvents = [
@@ -28,23 +28,23 @@ const annualEvents = [
   }
 ];
 
-const onceEvents = [
+const variableEvents = [
   {
     text:
       "ASSISTANT PRINCIPALS, SCHOOL-BASED INTERMEDIATE SUPERVISORS REPORT, SCHOOL-BASED INTERMEDIATE SUPERVISORS REPORT",
     timing: ['2016-9-1','2016-9-2'],
-    repeat: once,
+    repeat: variable,
     shading: bars
   },
   {
     text: "NEW MOON",
     timing: ['2016-9-1'],
-    repeat: once
+    repeat: variable
   },
   {
     text: "LABOR DAY Legal Holiday - Federal/State",
     timing: ['2016-9-5'],
-    repeat: once,
+    repeat: variable,
     shading: full,
     mlh: true,
     asp: true
@@ -52,11 +52,11 @@ const onceEvents = [
   {
     text: "Custodial Pay Day",
     timing: ['2016-9-8', '2016-9-22'],
-    repeat: once,
+    repeat: variable,
   }
 ];
 
-const dataset = [].concat(bannerEvents).concat(annualEvents).concat(onceEvents);
+const dataset = [].concat(bannerEvents).concat(annualEvents).concat(variableEvents);
 
 var events = Firebase.database().ref('events');
 events.set(dataset);
