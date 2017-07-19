@@ -113,9 +113,8 @@ const DatePicker = Backbone.View.extend({
     `<form>
     <label>Choose the year to display, from September through the following September:</label>
     <br>
-    <input class="num-year" placeholder="school calendar year" min="1" type="number" value=${START} /></input>
-    <br>
-    <button class='num-button' type='submit'>submit</button>
+    <input class="num-year" placeholder="school calendar year" min="1" type="number" value=${START} /></input> 
+    <button class='btn num-button' type='submit'>submit</button>
     </form>`
   ),
   render() {

@@ -24,10 +24,14 @@ const applicationRouter = Backbone.Router.extend({
 
   sort() {
     $('#root').html(ViewManager.showView(SortView))
+    $('ul.nav-pills > li').removeClass('active');
+    $('ul.nav-pills > li.nav-item.sort').addClass('active');
   },
 
   events() {
     $('#root').html(ViewManager.showView(EventsView))
+    $('ul.nav-pills > li').removeClass('active');
+    $('ul.nav-pills > li.nav-item.events').addClass('active');
   }
 
 });

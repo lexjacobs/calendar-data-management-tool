@@ -2,7 +2,7 @@ import Backbone from 'backbone';
 // import $ from 'jquery';
 // import _ from 'underscore';
 // import moment from 'moment';
-import './css-sort.css';
+import './css-events.css';
 import database from './collection-database';
 
 export const EventsView = Backbone.View.extend({
