@@ -8,7 +8,7 @@ import database from './collection-database';
 export const EventsView = Backbone.View.extend({
   initialize() {
     this.collection = database;
-    this.listenTo(this.collection, 'update', this.render);
+    this.listenTo(this.collection, 'updated', this.render);
     this.render();
   },
   render() {

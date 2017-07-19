@@ -3,22 +3,30 @@ import $ from 'jquery';
 import _ from 'underscore';
 import moment from 'moment';
 import dailyViews from './dailyViews'
+import database from './collection-database';
 import './css-sort.css';
 
-var START = moment().year()-1;
+var START = moment().year() - 1;
 
 export const SortView = Backbone.View.extend({
   initialize() {
-    this.render();
-  },
-  render() {
     this.datePicker = new DatePicker();
     this.sortedViews = new SortedViews();
-    this.$el.append(this.datePicker.el);
-    this.$el.append(this.sortedViews.el);
+    this.render();
 
     this.listenTo(this.datePicker, 'dateUpdated', this.redrawSortedViews);
 
+    let lazyRedraw = _.throttle(this.redrawSortedViews, 500, {
+      leading: false
+    }).bind(this);
+
+    this.listenTo(database, 'updated', function () {
+      lazyRedraw();
+    }, this)
+  },
+  render() {
+    this.$el.append(this.datePicker.el);
+    this.$el.append(this.sortedViews.el);
     return this;
   },
   generateDailyViews(start, end) {
@@ -39,7 +47,7 @@ const SortedViews = Backbone.View.extend({
   },
   render() {
     this.$el.html('');
-    this.collection &&  this.collection.models.forEach(x => {
+    this.collection && this.collection.models.forEach(x => {
 
       // on the first of the month, split out banner events and render first
       if (x.get('date').date() === 1) {
@@ -47,16 +55,20 @@ const SortedViews = Backbone.View.extend({
 
         this.$el.append(`<div style="font-size:20px;">${x.get('date').format('MMMM')} heading:</div>`)
         this.$el.append(new ItemView({
-          collection: new Backbone.Collection(events.where({repeat: 'banner'}))
+          collection: new Backbone.Collection(events.where({
+            repeat: 'banner'
+          }))
         }).el);
 
         this.$el.append(`<br>${x.get('date').format('MMM DD, YYYY ddd')} <br>`);
 
         this.$el.append(new ItemView({
-          collection: new Backbone.Collection(events.reject({repeat: 'banner'}))
+          collection: new Backbone.Collection(events.reject({
+            repeat: 'banner'
+          }))
         }).el);
 
-      // on other days just render the events of that day
+        // on other days just render the events of that day
       } else {
 
         // append event block date
@@ -79,15 +91,14 @@ const SortedViews = Backbone.View.extend({
 
 const DatePicker = Backbone.View.extend({
   initialize() {
-    this.model = new Backbone.Model();
-    this.listenTo(this.model, 'change', this.announce);
+    this.model = new Backbone.Model({
+      start: `${START}-09-01`,
+      end: `${+START+1}-09-01`
+    });
     this.render();
   },
-  announce() {
-    this.trigger('dateUpdated');
-  },
   events: {
-    'submit': "setStartEnd",
+    'submit': 'setStartEnd',
   },
   setStartEnd(e) {
     let start = $('.num-year').val();
@@ -96,6 +107,7 @@ const DatePicker = Backbone.View.extend({
       'start': `${start}-09-01`,
       'end': `${+start+1}-09-01`
     });
+    this.trigger('dateUpdated');
   },
   template: _.template(
     `<form>

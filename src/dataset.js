@@ -1,5 +1,6 @@
 // IMPORTANT: year-month-day OR month-day OR month!!!
 import { annual, banner, bars, full, once } from './constants';
+import { Firebase } from './firebase';
 
 const bannerEvents = [
   {
@@ -57,7 +58,7 @@ const onceEvents = [
 
 const dataset = [].concat(bannerEvents).concat(annualEvents).concat(onceEvents);
 
-// var events = Firebase.database().ref('events');
-// events.set(dataset);
+var events = Firebase.database().ref('events');
+events.set(dataset);
 
 export default dataset;

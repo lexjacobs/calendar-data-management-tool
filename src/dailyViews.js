@@ -2,67 +2,36 @@ import Backbone from 'backbone';
 import _ from 'underscore';
 import moment from 'moment';
 import database from './collection-database';
-// import eventModel from './model-event';
 
-// test: add a new event
-// test: change the event timing
-
-// setTimeout(_ => {
-//   console.log('timout');
-//   var test = new eventModel({
-//     text: 'event model sample text',
-//     timing: ['2016-09-03'],
-//     repeat: 'once'
-//   })
-//
-//   database.add(test);
-//   database.at(-1).set('text', 'event model sample text to')
-//   database.add({
-//     text: 'after delay test',
-//     timing: ['2016-09-04'],
-//     repeat: 'once'
-//   })
-// }, 2000)
-//
-// setTimeout(function () {
-//   database.at(-2).addNewTiming(['2016-9-15']);
-//   database.at(-2).addNewTiming(['2016-9-14']);
-//   database.at(-2).addNewTiming(['2016-9-13']);
-//   console.log('last', database.pop());
-//   console.log('last', database.pop());
-// }, 2500);
-
-// end tests
-
+// the final Collection that will be returned
+const collectionOfEventsByFullDate = new Backbone.Collection();
 
 /*
- function to return a Backbone Collection that sorts events in date buckets.
+ function to populate a Backbone Collection with events sorted in date buckets.
  */
 
 export default function dailyViews(start, end) {
-  var CURRENT = start;
 
-  // the final Collection that will be returned
-  var collectionOfEventsByFullDate = new Backbone.Collection();
+  collectionOfEventsByFullDate.reset();
 
   // loop between start and end
-  while (end.diff(CURRENT, 'days') >= 0) {
+  while (end.diff(start, 'days') >= 0) {
 
     // to final Collection, add bucket of models that
     // contain their date, and a Collection of events
     // that occur on that date, either due to repetition
     // or a singular event
     collectionOfEventsByFullDate.add({
-      events: extractEvents(CURRENT),
-      date: moment(CURRENT.clone())
+      events: extractEvents(start),
+      date: moment(start.clone())
     })
-    CURRENT = CURRENT.add(1, 'd');
+    start = start.add(1, 'd');
   }
 
   return collectionOfEventsByFullDate;
 }
 
-function extractEvents(CURRENT) {
+function extractEvents(start) {
   // iterate through entire database
   var result = database.models.filter(x => {
 
@@ -72,8 +41,8 @@ function extractEvents(CURRENT) {
       // include it if the day and month match
       return _.filter(x.timing.models, instance => {
         return _.where(instance, {
-          d: +CURRENT.date(),
-          m: +CURRENT.month() + 1
+          d: +start.date(),
+          m: +start.month() + 1
         }).length;
       }).length;
 
@@ -82,9 +51,9 @@ function extractEvents(CURRENT) {
       // include it if the day/month/year match
       return _.filter(x.timing.models, instance => {
         return _.where(instance, {
-          d: +CURRENT.date(),
-          m: +CURRENT.month() + 1,
-          y: +CURRENT.year()
+          d: +start.date(),
+          m: +start.month() + 1,
+          y: +start.year()
         }).length;
       }).length;
 
@@ -92,12 +61,12 @@ function extractEvents(CURRENT) {
     } else if (x.get('repeat') === 'banner') {
 
       // only include it on the first day of the month
-      if (+CURRENT.date() !== 1) return null;
+      if (+start.date() !== 1) return null;
 
       // and if the current month matches
       return _.filter(x.timing.models, instance => {
         return _.where(instance, {
-          m: +CURRENT.month() + 1
+          m: +start.month() + 1
         }).length;
       }).length;
     } else {
