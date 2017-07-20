@@ -16,12 +16,8 @@ export const SortView = Backbone.View.extend({
 
     this.listenTo(this.datePicker, 'dateUpdated', this.redrawSortedViews);
 
-    let lazyRedraw = _.throttle(this.redrawSortedViews, 500, {
-      leading: false
-    }).bind(this);
-
     this.listenTo(database, 'updated', function () {
-      lazyRedraw();
+      this.redrawSortedViews();
     }, this)
   },
   render() {
@@ -127,13 +123,13 @@ const ItemView = Backbone.View.extend({
   initialize(options) {
 
     // check for any instance of shading
-    if (this.checkFor('asp', 'true')) this.$el.append(`<span class="asp"></span>`);
+    if (this.checkFor('asp', 'yes')) this.$el.append(`<span class="asp"></span>`);
 
-    if (this.checkFor('mlh', 'true')) this.$el.append(`<span class="mlh"></span>`);
+    if (this.checkFor('mlh', 'yes')) this.$el.append(`<span class="mlh"></span>`);
 
-    if (this.checkFor('previousSundown', 'true')) this.$el.append(`<span class="previous-sundown"></span>`);
+    if (this.checkFor('previousSundown', 'yes')) this.$el.append(`<span class="previous-sundown"></span>`);
 
-    if (this.checkFor('proclamation', 'true')) this.$el.append(`<i class="glyphicon glyphicon-star">`);
+    if (this.checkFor('proclamation', 'yes')) this.$el.append(`<i class="glyphicon glyphicon-star">`);
 
     if (this.checkFor('shading', 'full')) this.$el.addClass('shading-full');
 
@@ -145,7 +141,6 @@ const ItemView = Backbone.View.extend({
   },
   checkFor(attr, target) {
     return this.collection.models.filter(x => {
-      // works for any shading, but only 'true' for asp/mlh
       return x.get(attr) === target;
     }).length;
   },
@@ -155,7 +150,7 @@ const ItemView = Backbone.View.extend({
   render() {
     this.collection.models.forEach(x => {
       this.$el.append(`
-        <span class="individual-sorted-item">${x.get('text')}</span>
+        <div class="individual-sorted-item">${x.get('text')}</div>
         `);
     })
     return this;

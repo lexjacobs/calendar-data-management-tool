@@ -33,13 +33,16 @@ const eventModel = Backbone.Model.extend({
     timing: [],
     repeat: 'variable',
     shading: 'none',
-    mlh: 'false',
-    asp: 'false',
-    proclamation: 'false',
-    previousSundown: 'false'
+    mlh: 'no',
+    asp: 'no',
+    proclamation: 'no',
+    previousSundown: 'no'
   },
   serializeTiming() {
-    this.set('timing', this.timing.toJSON());
+    console.log('timing', this.timing);
+    this.set('timing', this.timing.models.map(x => {
+      return [x.get('y'), x.get('m'), x.get('d')].join('-');
+    }));
   },
   // method for adding string timings after initialization
   addNewTiming(date) {

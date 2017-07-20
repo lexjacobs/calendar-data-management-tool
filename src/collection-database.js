@@ -5,8 +5,9 @@ import Backbone from 'backbone';
 
 import eventModel from './model-event';
 import { Firebase } from './firebase';
-
 var events = Firebase.database().ref('events');
+
+// var events = Firebase.database().ref('events');
 
 
 // test: add a new event
@@ -14,29 +15,34 @@ var events = Firebase.database().ref('events');
 
 // var test = new eventModel({
 //   text: 'test event for half shading',
-//   timing: ['2016-09-04'],
+//   timing: ['2016-9-4'],
 //   repeat: 'variable',
-//   shading: 'half'
+//   shading: 'diagonal',
+//   mlh: 'yes',
+//   proclamation: 'yes',
+//   previousSundown: 'yes',
+//   asp: 'yes'
 // })
 //
 // setTimeout(function () {
 //   console.log('timout 1');
 //   database.add(test);
-// }, 1500);
-
-
+// }, 3000);
+//
+//
 // setTimeout(function () {
 //   console.log('timout 2');
-//   database.last().set('text', 'event model sample text changed')
-//     database.last().addNewTiming(['2016-9-15']);
-// }, 3000);
+//   // database.last().set('text', 'event model sample text changed')
+//     database.last().addNewTiming(['2016-9-5']);
+//     database.last().addNewTiming(['2016-9-6']);
+// }, 5000);
 //
 //
 // setTimeout(_ => {
 //   console.log('timout 3');
 //   database.pop();
 //
-// }, 5000)
+// }, 10000)
 
 // end tests
 
@@ -56,7 +62,6 @@ const Database = Backbone.Collection.extend({
   },
   answer(event, cb) {
     console.log('database collection heard', event, cb);
-    var events = Firebase.database().ref('events');
     events.set(this.toJSON());
     this.trigger('updated')
   },
@@ -65,11 +70,11 @@ const Database = Backbone.Collection.extend({
 
 const database = new Database();
 
-// initialize on load
-events.once('value', (snapshot) => {
-  console.log('database values', snapshot.val());
-  database.reset();
-  database.add(snapshot.val());
-});
+// // initialize on load
+// events.once('value', (snapshot) => {
+//   console.log('database values', snapshot.val());
+//   database.reset();
+//   database.add(snapshot.val());
+// });
 
 export default database;

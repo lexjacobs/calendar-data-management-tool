@@ -62,10 +62,10 @@ const IndividualEvent = Backbone.View.extend({
     'click .editButton': 'answer'
   },
   answer(e) {
-    console.log('heard click', this.model.cid, this.model.attributes);
+    // this.editBlock.$el.toggleClass('hidden');
   },
   render() {
-    this.$el.html(`<span class="editButton"><button class='btn btn-sm'>edit</button> </span>
+    this.$el.html(`<span class="editButton"><a href="#/edit/${this.model.cid}"><button class='btn btn-sm'>edit</button></a> </span>
     text: ${this.model.get('text')}<br>
     timing: ${this.model.get('timing')}<br>
     repeat: ${this.model.get('repeat')}<br>
@@ -73,6 +73,7 @@ const IndividualEvent = Backbone.View.extend({
     asp: ${this.model.get('asp')}<br>
     shading: ${this.model.get('shading')}<br>
     `);
+    // this.$el.append(this.editBlock.el);
     return this;
   }
 })
