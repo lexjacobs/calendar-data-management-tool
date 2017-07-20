@@ -46,8 +46,8 @@ const variableEvents = [
     timing: ['2016-9-5'],
     repeat: variable,
     shading: full,
-    mlh: true,
-    asp: true
+    mlh: "true",
+    asp: "true"
   },
   {
     text: "Custodial Pay Day",

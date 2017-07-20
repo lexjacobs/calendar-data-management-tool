@@ -46,16 +46,16 @@ const Database = Backbone.Collection.extend({
     this.listenTo(this, 'change', function (x) {
       this.answer('change', x);
     }, this);
-    this.listenTo(this, 'add', function (x) {
-      this.answer('add', x);
-    }, this);
+    // this.listenTo(this, 'add', function (x) {
+    //   this.answer('add', x);
+    // }, this);
     this.listenTo(this, 'update', function (x) {
       this.answer('update', x);
     }, this);
 
   },
   answer(event, cb) {
-    // console.log('heard', event, cb);
+    console.log('database collection heard', event, cb);
     var events = Firebase.database().ref('events');
     events.set(this.toJSON());
     this.trigger('updated')
