@@ -113,7 +113,7 @@ const DatePicker = Backbone.View.extend({
     `<form>
     <label>Choose the year to display, from September through the following September:</label>
     <br>
-    <input class="num-year" placeholder="school calendar year" min="1" type="number" value=${START} /></input> 
+    <input class="num-year" placeholder="school calendar year" min="1" type="number" value=${START} /></input>
     <button class='btn num-button' type='submit'>submit</button>
     </form>`
   ),
@@ -127,30 +127,36 @@ const ItemView = Backbone.View.extend({
   initialize(options) {
 
     // check for any instance of shading
-    if (this.checkFor('shading')) this.$el.addClass('shading');
-
     if (this.checkFor('asp', true)) this.$el.append(`<span class="asp"></span>`);
 
     if (this.checkFor('mlh', true)) this.$el.append(`<span class="mlh"></span>`);
 
+    if (this.checkFor('previousSundown', true)) this.$el.append(`<span class="previous-sundown"></span>`);
+
+    if (this.checkFor('proclamation', true)) this.$el.append(`<i class="glyphicon glyphicon-star">`);
+
+    if (this.checkFor('shading', 'full')) this.$el.addClass('shading-full');
+
+    if (this.checkFor('shading', 'diagonal')) this.$el.addClass('shading-diagonal')
+
+    if (this.checkFor('shading', 'bars')) this.$el.addClass('shading-bars');
 
     this.render();
   },
   checkFor(attr, target) {
     return this.collection.models.filter(x => {
       // works for any shading, but only 'true' for asp/mlh
-      if (target === undefined) {
-        return x.get(attr) !== undefined;
-      }
       return x.get(attr) === target;
     }).length;
   },
   className: 'items',
   tagName: 'div',
-  template: _.template('<span class="individual-sorted-item"><%= text %><br></span>'),
+  template: _.template(''),
   render() {
     this.collection.models.forEach(x => {
-      this.$el.append(this.template(x.attributes));
+      this.$el.append(`
+        <span class="individual-sorted-item">${x.get('text')}</span>
+        `);
     })
     return this;
   }

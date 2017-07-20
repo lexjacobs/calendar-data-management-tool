@@ -28,7 +28,16 @@ const eventModel = Backbone.Model.extend({
     // NOT saving in attributes, but as a property
     this.timing = new Backbone.Collection(this.get('timing').map(x => timingMapper(x, this.get('repeat'))));
   },
-
+  defaults: {
+    text: "This is where you enter the text that you want to show up on the calendar on the selected day / days.",
+    timing: [],
+    repeat: 'variable',
+    shading: 'none',
+    mlh: false,
+    asp: false,
+    proclamation: false,
+    previousSundown: false
+  },
   serializeTiming() {
     this.set('timing', this.timing.toJSON());
   },

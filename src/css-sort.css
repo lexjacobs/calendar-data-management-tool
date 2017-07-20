@@ -3,29 +3,74 @@
   padding: 6px;
   border: 1px solid;
   border-radius: 4px;
+  position: relative;
 }
 
 .asp::after {
   display: inline;
   content: 'ASP: OFF';
-  padding-right: 10px;
+  padding: 0 3px;
+  margin-right: 4px;
+  border: 1px solid black;
 }
 
 .mlh::after {
   display: inline;
   content: 'MLH: ON';
-  padding-right: 10px;
+  padding: 0 3px;
+  margin-right: 4px;
+  border: 1px solid black;
 }
 
-.shading {
-  background-color: lightblue;
+.shading-full {
+  position: relative;
+  border-left: 90px solid lightblue;
+  z-index: -1;
 }
 
-.individual-sorted-item {
-  padding: 5px 0;
-  display: block;
+.shading-full::before {
+  content: 'shading: full';
+  position: absolute;
+  z-index: 2;
+  margin-left: -90px;
+  border: 1px solid black;
 }
 
-.sundown::before {
-  content: '•'
+.shading-bars {
+  position: relative;
+  border-left: 180px solid lightblue;
+  z-index: -1;
+}
+
+.shading-bars::before {
+  content: 'shading: horizontal bars';
+  position: absolute;
+  z-index: 2;
+  margin-left: -180px;
+  border: 1px solid black;
+}
+
+.shading-diagonal {
+  position: relative;
+  border-left: 130px solid lightblue;
+  z-index: -1;
+}
+
+.shading-diagonal::before {
+  content: 'shading: diagonal';
+  position: absolute;
+  z-index: 2;
+  margin-left: -130px;
+  border: 1px solid black;
+}
+
+.previous-sundown {
+  margin-right: 20px;
+}
+
+.previous-sundown:after {
+  top: -20px;
+  position: absolute;
+  font-size: 50px;
+  content: '•';
 }
