@@ -33,10 +33,10 @@ const eventModel = Backbone.Model.extend({
     timing: [],
     repeat: 'variable',
     shading: 'none',
-    mlh: false,
-    asp: false,
-    proclamation: false,
-    previousSundown: false
+    mlh: 'false',
+    asp: 'false',
+    proclamation: 'false',
+    previousSundown: 'false'
   },
   serializeTiming() {
     this.set('timing', this.timing.toJSON());

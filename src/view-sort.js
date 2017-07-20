@@ -127,13 +127,13 @@ const ItemView = Backbone.View.extend({
   initialize(options) {
 
     // check for any instance of shading
-    if (this.checkFor('asp', true)) this.$el.append(`<span class="asp"></span>`);
+    if (this.checkFor('asp', 'true')) this.$el.append(`<span class="asp"></span>`);
 
-    if (this.checkFor('mlh', true)) this.$el.append(`<span class="mlh"></span>`);
+    if (this.checkFor('mlh', 'true')) this.$el.append(`<span class="mlh"></span>`);
 
-    if (this.checkFor('previousSundown', true)) this.$el.append(`<span class="previous-sundown"></span>`);
+    if (this.checkFor('previousSundown', 'true')) this.$el.append(`<span class="previous-sundown"></span>`);
 
-    if (this.checkFor('proclamation', true)) this.$el.append(`<i class="glyphicon glyphicon-star">`);
+    if (this.checkFor('proclamation', 'true')) this.$el.append(`<i class="glyphicon glyphicon-star">`);
 
     if (this.checkFor('shading', 'full')) this.$el.addClass('shading-full');
 
