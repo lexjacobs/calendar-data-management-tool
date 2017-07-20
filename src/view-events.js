@@ -63,9 +63,10 @@ const IndividualEvent = Backbone.View.extend({
   },
   deleteRecord() {
     if (window.confirm(`confirm deletion of ${this.model.get('text')}`)) {
-      console.log('I would delete this record');
+      console.log(`Deleting ${this.model.get('text')}`);
+      database.remove(this.model.cid);
     } else {
-      console.log('I would not delete this record');
+      console.log(`Not deleting ${this.model.get('text')}`);
     }
   },
   openEditRoute() {
