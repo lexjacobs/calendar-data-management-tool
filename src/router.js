@@ -19,7 +19,7 @@ var ViewManager = {
     }
 }
 
-const applicationRouter = Backbone.Router.extend({
+const ApplicationRouter = Backbone.Router.extend({
   routes: {
     "sort": "sort",
     "events": "events",
@@ -45,4 +45,4 @@ const applicationRouter = Backbone.Router.extend({
 
 });
 
-export default applicationRouter;
+export default ApplicationRouter;

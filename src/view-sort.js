@@ -123,13 +123,9 @@ const ItemView = Backbone.View.extend({
   initialize(options) {
 
     // check for any instance of shading
-    if (this.checkFor('asp', 'yes')) this.$el.append(`<span class="asp"></span>`);
+    if (this.checkFor('asp', 'yes')) this.$el.append(`<div class="asp"></div>`);
 
-    if (this.checkFor('mlh', 'yes')) this.$el.append(`<span class="mlh"></span>`);
-
-    if (this.checkFor('previousSundown', 'yes')) this.$el.append(`<span class="previous-sundown"></span>`);
-
-    if (this.checkFor('proclamation', 'yes')) this.$el.append(`<i class="glyphicon glyphicon-star">`);
+    if (this.checkFor('mlh', 'yes')) this.$el.append(`<div class="mlh"></div>`);
 
     if (this.checkFor('shading', 'full')) this.$el.addClass('shading-full');
 
@@ -149,10 +145,28 @@ const ItemView = Backbone.View.extend({
   template: _.template(''),
   render() {
     this.collection.models.forEach(x => {
-      this.$el.append(`
-        <div class="individual-sorted-item">${x.get('text')}</div>
-        `);
+      this.$el.append(new IndividualItem({
+        model: x
+      }).el);
     })
+    return this;
+  }
+});
+
+const IndividualItem = Backbone.View.extend({
+  initialize() {
+    if (this.checkFor('proclamation', 'yes')) {
+      this.$el.append(`<i class="glyphicon glyphicon-star">`);
+    }
+    if (this.checkFor('previousSundown', 'yes')) this.$el.append(`<span class="previous-sundown"></span><span class="sundown-spacer"></span>`);
+    this.render();
+  },
+  checkFor(attr, target) {
+    return this.model.get(attr) === target;
+  },
+  className: 'individual-sorted-item',
+  render() {
+    this.$el.append(`${this.model.get('text')}`);
     return this;
   }
 });

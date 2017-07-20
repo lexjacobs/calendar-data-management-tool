@@ -4,6 +4,11 @@
 }
 
 .individual-event-block {
+  position: relative;
   border: 1px solid #000;
   border-radius: 4px;
+}
+
+.deleteButton {
+  float: right;
 }

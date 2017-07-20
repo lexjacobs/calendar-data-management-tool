@@ -1,11 +1,11 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import Backbone from 'backbone';
-import applicationRouter from './router';
+import ApplicationRouter from './router';
 import { Firebase } from './firebase';
 import database from './collection-database';
 
 console.log('initializing router');
-export const router = new applicationRouter();
+export const router = new ApplicationRouter();
 
 // initialize on load
 var events = Firebase.database().ref('events');

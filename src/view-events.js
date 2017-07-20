@@ -1,7 +1,6 @@
 import Backbone from 'backbone';
 import $ from 'jquery';
-// import _ from 'underscore';
-// import moment from 'moment';
+import { router } from './index';
 import './css-events.css';
 import database from './collection-database';
 
@@ -59,13 +58,26 @@ const IndividualEvent = Backbone.View.extend({
   },
   className: 'individual-event-block',
   events: {
-    'click .editButton': 'answer'
+    'click .editButton': 'openEditRoute',
+    'click .deleteButton': 'deleteRecord'
   },
-  answer(e) {
-    // this.editBlock.$el.toggleClass('hidden');
+  deleteRecord() {
+    if (window.confirm(`confirm deletion of ${this.model.get('text')}`)) {
+      console.log('I would delete this record');
+    } else {
+      console.log('I would not delete this record');
+    }
+  },
+  openEditRoute() {
+    router.navigate(`#/edit/${this.model.cid}`);
   },
   render() {
-    this.$el.html(`<span class="editButton"><a href="#/edit/${this.model.cid}"><button class='btn btn-sm'>edit</button></a> </span>
+    this.$el.html(`<span class="editButton event-button">
+      <button class='btn btn-sm'>edit</button>
+    </span>
+    <span class="deleteButton event-button">
+    <button class='btn btn-danger btn-sm'>delete</button>
+    </span><br>
     text: ${this.model.get('text')}<br>
     timing: ${this.model.get('timing')}<br>
     repeat: ${this.model.get('repeat')}<br>
