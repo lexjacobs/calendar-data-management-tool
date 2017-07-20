@@ -1,6 +1,10 @@
 .filter-chooser {
-  font-weight: bold;
   margin: 20px 0;
+}
+
+.filter-chooser .active {
+  text-decoration: underline;
+  font-weight: bold;
 }
 
 .individual-event-block {

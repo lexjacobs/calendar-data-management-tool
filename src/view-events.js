@@ -1,4 +1,5 @@
 import Backbone from 'backbone';
+import _ from 'underscore';
 import $ from 'jquery';
 import { router } from './index';
 import './css-events.css';
@@ -7,12 +8,8 @@ import database from './collection-database';
 export const EventsView = Backbone.View.extend({
   initialize() {
     this.filterChooser = new FilterChooser();
-    this.individualEventBlock = new IndividualEventBlock();
+    this.individualEventBlock = new IndividualEventBlock({model: this.filterChooser.model});
     this.render();
-    this.listenTo(this.filterChooser, 'filterClicked', this.filterEvents);
-  },
-  filterEvents(e) {
-    this.individualEventBlock.trigger('drawWithFilter', e)
   },
   render() {
     this.$el.html('');
@@ -24,21 +21,10 @@ export const EventsView = Backbone.View.extend({
 
 const IndividualEventBlock = Backbone.View.extend({
   initialize() {
-    this.model = new Backbone.Model({
-      filter: {}
-    });
     this.collection = database;
     this.listenTo(this.collection, 'updated', this.render);
-    this.listenTo(this, 'drawWithFilter', this.drawWithFilter)
     this.listenTo(this.model, 'change', this.render);
     this.render();
-  },
-  drawWithFilter(e) {
-    if (e === 'all') {
-      this.model.set({'filter': {}})
-    } else {
-      this.model.set({'filter': {repeat: e}});
-    }
   },
   render() {
     this.$el.html('');
@@ -86,13 +72,15 @@ const IndividualEvent = Backbone.View.extend({
     asp: ${this.model.get('asp')}<br>
     shading: ${this.model.get('shading')}<br>
     `);
-    // this.$el.append(this.editBlock.el);
     return this;
   }
 })
 
 const FilterChooser = Backbone.View.extend({
   initialize() {
+    this.model = new Backbone.Model({
+      filter: {}
+    });
     this.render();
   },
   className: 'filter-chooser well',
@@ -101,10 +89,24 @@ const FilterChooser = Backbone.View.extend({
   },
   clickHandler(e) {
     let clickTarget = $(e.target).data('repeat');
-    this.trigger('filterClicked', clickTarget);
+    if (clickTarget === undefined) return null;
+    if (clickTarget === 'all') {
+      this.model.set({'filter': {}})
+    } else {
+      this.model.set({'filter': {repeat: clickTarget}});
+    }
+    this.render();
   },
+  template: _.template(`Filter by:
+  <span class="<% if(this.model.get('filter').repeat === 'annual')print('active') %>" data-repeat="annual">
+  Annual events</span> |
+  <span class="<% if(this.model.get('filter').repeat === 'variable')print('active') %>" data-repeat="variable">
+  Changing Events</span> |
+  <span class="<% if(this.model.get('filter').repeat === 'banner')print('active') %>" data-repeat="banner">Month headings</span> |
+  <span class="<% if(this.model.get('filter').repeat === undefined)print('active') %>" data-repeat="all">All Events</span>`
+),
   render() {
-    this.$el.html(`Filter by: <span data-repeat="annual">Annual events</span> | <span data-repeat="variable">Changing Events</span> | <span data-repeat="banner">Month headings</span> | <span data-repeat="all">none</span>`);
+    this.$el.html(this.template(this.model.attributes));
     return this;
   }
 });
