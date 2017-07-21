@@ -1,13 +1,14 @@
 import Backbone from 'backbone';
 import $ from 'jquery';
 import database from './collection-database';
+import './css-edit.css';
 
 export const EditView = Backbone.View.extend({
   initialize(options) {
     this.collection = database;
     this.options = options;
     this.editBlock = new EditBlock({
-      model: this.collection.get(options.routeParameters[0])
+      model: this.collection.get(options.cid)
     });
     this.render();
   },
@@ -30,7 +31,6 @@ const EditBlock = Backbone.View.extend({
   composeEventUpdate() {
     let timingResult = [];
     $('.timingPill').each((x, y) => timingResult.push($(y).text()));
-    console.log('res', timingResult);
 
     let formResult = {};
     this.$el.find('.editBlock').serializeArray().forEach(x => {
@@ -46,16 +46,18 @@ const EditBlock = Backbone.View.extend({
     <form class="editBlock">
 
     <label>event text:<br>
-      <textarea class="event-text" name="text" rows="3" cols="80" type="text-box">${this.model.get('text')}</textarea>
+      <textarea class="event-text" name="text" rows="3" cols="70" type="text-box">${this.model.get('text')}</textarea>
     </label><br>
 
-    <div class="timingBlocks"></div><br>
+    <label>Dates (click to delete):<br>
+      <div class="timingBlocks"></div><br>
+    </label><br>
 
-    <label>repeat pattern:<br>
+    <label>repeat pattern: (delete event and re-create to change)<br>
       <select disabled class="form-control" name="repeat">
         <option ${this.model.get('repeat') === 'annual' ? 'selected' : ''} value="annual">annual</option>
         <option ${this.model.get('repeat') === 'variable' ? 'selected' : ''} value="variable">variable</option>
-        <option ${this.model.get('repeat') === 'banner' ? 'selected' : ''} value="banner">information about month</option>
+        <option ${this.model.get('repeat') === 'banner' ? 'selected' : ''} value="banner">calendar month heading</option>
       </select>
     </label><br>
 
@@ -68,18 +70,25 @@ const EditBlock = Backbone.View.extend({
       </select>
     </label><br>
 
-    <label>asp:<br>
-      <select class="form-control" name="asp">
-        <option ${this.model.get('asp') === 'no' ? 'selected' : ''} value="no">no</option>
-        <option ${this.model.get('asp') === 'yes' ? 'selected' : ''} value="yes">yes</option>
-      </select>
-    </label><br>
-
     <label>mlh:<br>
       <select class="form-control" name="mlh">
         <option ${this.model.get('mlh') === 'no' ? 'selected' : ''} value="no">no</option>
         <option ${this.model.get('mlh') === 'yes' ? 'selected' : ''} value="yes">yes</option>
       </select>
+    </label><br>
+
+    <label>asp:<br>
+    <select class="form-control" name="asp">
+    <option ${this.model.get('asp') === 'no' ? 'selected' : ''} value="no">no</option>
+    <option ${this.model.get('asp') === 'yes' ? 'selected' : ''} value="yes">yes</option>
+    </select>
+    </label><br>
+
+    <label>annual presidential proclamation:<br>
+    <select class="form-control" name="proclamation">
+    <option ${this.model.get('proclamation') === 'no' ? 'selected' : ''} value="no">no</option>
+    <option ${this.model.get('proclamation') === 'yes' ? 'selected' : ''} value="yes">yes</option>
+    </select>
     </label><br>
 
     <label>event starts previous sundown:<br>
@@ -88,15 +97,8 @@ const EditBlock = Backbone.View.extend({
         <option ${this.model.get('previousSundown') === 'yes' ? 'selected' : ''} value="yes">yes</option>
       </select>
     </label><br>
-
-    <label>annual presidential proclamation:<br>
-      <select class="form-control" name="proclamation">
-        <option ${this.model.get('proclamation') === 'no' ? 'selected' : ''} value="no">no</option>
-        <option ${this.model.get('proclamation') === 'yes' ? 'selected' : ''} value="yes">yes</option>
-      </select>
-    </label><br>
-
-    <button type='submit' class="btn btn-sm">Update</button>
+    <br>
+    <button type='submit' class="btn btn-success btn-lg">Update</button>
     </form>
     `);
     this.$el.find('.timingBlocks').html(new TimingBlockContainer({

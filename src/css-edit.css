@@ -1,3 +1,3 @@
-button.timingPill::after {
-  content: 'X';
+i.glyphicon {
+  margin: 3px 0 0 6px;
 }

@@ -4,24 +4,36 @@ import $ from 'jquery';
 import { router } from './index';
 import './css-events.css';
 import database from './collection-database';
+import EditModal from './view-editModal';
 
 export const EventsView = Backbone.View.extend({
   initialize() {
+    this.collection = database;
     this.filterChooser = new FilterChooser();
-    this.individualEventBlock = new IndividualEventBlock({model: this.filterChooser.model});
+    this.individualEventBlock = new IndividualEventBlock({
+      model: this.filterChooser.model,
+      collection: this.collection
+    });
+    this.editModal = new EditModal({
+      collection: this.collection
+    });
     this.render();
+    this.listenTo(this.collection, 'updateEditModal', this.handleUpdateEventModal);
   },
   render() {
     this.$el.html('');
     this.$el.append(this.filterChooser.el);
     this.$el.append(this.individualEventBlock.el);
+    this.$el.append(this.editModal.el);
     return this;
+  },
+  handleUpdateEventModal(e) {
+    this.editModal.trigger('updateEditView', e);
   }
 });
 
 const IndividualEventBlock = Backbone.View.extend({
   initialize() {
-    this.collection = database;
     this.listenTo(this.collection, 'updated', this.render);
     this.listenTo(this.model, 'change', this.render);
     this.render();
@@ -30,7 +42,8 @@ const IndividualEventBlock = Backbone.View.extend({
     this.$el.html('');
     this.collection.where(this.model.get('filter')).forEach(function(x) {
       this.$el.append(new IndividualEvent({
-        model: x
+        model: x,
+        collection: this.collection
       }).el);
     }, this);
     return this;
@@ -40,12 +53,14 @@ const IndividualEventBlock = Backbone.View.extend({
 const IndividualEvent = Backbone.View.extend({
   initialize() {
     this.render();
-    this.collection = database;
   },
   className: 'individual-event-block',
   events: {
-    'click .editButton': 'openEditRoute',
-    'click .deleteButton': 'deleteRecord'
+    'click .editEvent': 'editEvent',
+    'click .deleteButton': 'deleteRecord',
+  },
+  editEvent() {
+    this.collection.trigger('updateEditModal', this.model.cid);
   },
   deleteRecord() {
     if (window.confirm(`confirm deletion of ${this.model.get('text')}`)) {
@@ -59,9 +74,12 @@ const IndividualEvent = Backbone.View.extend({
     router.navigate(`#/edit/${this.model.cid}`);
   },
   render() {
-    this.$el.html(`<span class="editButton event-button">
-      <button class='btn btn-sm'>edit</button>
-    </span>
+    this.$el.html(`
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary btn-sm editEvent" data-toggle="modal" data-target="#editModal">
+    Edit
+    </button>
+
     <span class="deleteButton event-button">
     <button class='btn btn-danger btn-sm'>delete</button>
     </span><br>
