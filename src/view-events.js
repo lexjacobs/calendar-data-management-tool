@@ -66,11 +66,15 @@ const IndividualEvent = Backbone.View.extend({
     <button class='btn btn-danger btn-sm'>delete</button>
     </span><br>
     text: ${this.model.get('text')}<br>
-    timing: ${this.model.get('timing')}<br>
     repeat: ${this.model.get('repeat')}<br>
+
+    ${this.model.get('repeat') === 'banner' ? 'calendar month box' : 'date(s)'}: ${this.model.get('timing').join(' / ')}<br>
+
+    shading: ${this.model.get('shading')}<br>
     mlh: ${this.model.get('mlh')}<br>
     asp: ${this.model.get('asp')}<br>
-    shading: ${this.model.get('shading')}<br>
+    presidential proclamation: ${this.model.get('proclamation')}<br>
+    starts previous sundown: ${this.model.get('previousSundown')}<br>
     `);
     return this;
   }

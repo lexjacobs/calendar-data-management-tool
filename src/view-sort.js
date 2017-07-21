@@ -122,16 +122,18 @@ const DatePicker = Backbone.View.extend({
 const ItemView = Backbone.View.extend({
   initialize(options) {
 
+    this.$el.prepend(`<span class="hidden shading-box">shading: </span>`)
+
     // check for any instance of shading
     if (this.checkFor('asp', 'yes')) this.$el.append(`<div class="asp"></div>`);
 
     if (this.checkFor('mlh', 'yes')) this.$el.append(`<div class="mlh"></div>`);
 
-    if (this.checkFor('shading', 'full')) this.$el.addClass('shading-full');
+    if (this.checkFor('shading', 'full')) this.$el.find('.shading-box').removeClass('hidden').append('full ');
 
-    if (this.checkFor('shading', 'diagonal')) this.$el.addClass('shading-diagonal')
+    if (this.checkFor('shading', 'diagonal')) this.$el.find('.shading-box').removeClass('hidden').append('diagonal ');
 
-    if (this.checkFor('shading', 'bars')) this.$el.addClass('shading-bars');
+    if (this.checkFor('shading', 'bars')) this.$el.find('.shading-box').removeClass('hidden').append('bars ');
 
     this.render();
   },
@@ -142,7 +144,6 @@ const ItemView = Backbone.View.extend({
   },
   className: 'items',
   tagName: 'div',
-  template: _.template(''),
   render() {
     this.collection.models.forEach(x => {
       this.$el.append(new IndividualItem({

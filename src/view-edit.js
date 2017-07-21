@@ -3,7 +3,6 @@ import database from './collection-database';
 
 export const EditView = Backbone.View.extend({
   initialize(options) {
-    console.log('options: ', options)
     this.collection = database;
     this.options = options;
     this.editBlock = new EditBlock({
@@ -28,7 +27,6 @@ const EditBlock = Backbone.View.extend({
     e.preventDefault();
     console.log(this.$el.find('.editBlock').serialize());
   },
-  className: 'hidden',
   render() {
     this.$el.html(`
     <form class="editBlock">
