@@ -89,7 +89,7 @@ export function timingMapper(dateString, repeat) {
       m: +dateObject.month() + 1,
       d: +dateObject.date(),
       y: +dateObject.year()
-    }
+    };
   }
 
   // don't map a year for annual occurrences
@@ -98,7 +98,7 @@ export function timingMapper(dateString, repeat) {
     return {
       m: +dateObject.month() + 1,
       d: +dateObject.date()
-    }
+    };
   }
 
   // map month only for banner occurrences
@@ -106,7 +106,7 @@ export function timingMapper(dateString, repeat) {
     let dateObject = moment(dateString, 'M');
     return {
       m: +dateObject.month() + 1
-    }
+    };
   }
 }
 

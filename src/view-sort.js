@@ -2,7 +2,7 @@ import Backbone from 'backbone';
 import $ from 'jquery';
 import _ from 'underscore';
 import moment from 'moment';
-import dailyViews from './dailyViews'
+import dailyViews from './dailyViews';
 import database from './collection-database';
 import './css-sort.css';
 
@@ -18,7 +18,7 @@ export const SortView = Backbone.View.extend({
 
     this.listenTo(database, 'updated', function () {
       this.redrawSortedViews();
-    }, this)
+    }, this);
   },
   render() {
     this.$el.append(this.datePicker.el);
@@ -49,7 +49,7 @@ const SortedViews = Backbone.View.extend({
       if (x.get('date').date() === 1) {
         let events = new Backbone.Collection(x.get('events'));
 
-        this.$el.append(`<div style="font-size:20px;">${x.get('date').format('MMMM')} heading:</div>`)
+        this.$el.append(`<div style="font-size:20px;">${x.get('date').format('MMMM')} heading:</div>`);
         this.$el.append(new ItemView({
           collection: new Backbone.Collection(events.where({
             repeat: 'banner'
@@ -81,7 +81,7 @@ const SortedViews = Backbone.View.extend({
       // })
 
       return this;
-    })
+    });
   }
 });
 
@@ -123,9 +123,9 @@ const DatePicker = Backbone.View.extend({
 });
 
 const ItemView = Backbone.View.extend({
-  initialize(options) {
+  initialize() {
 
-    this.$el.prepend(`<span class="hidden shading-box">shading: </span>`)
+    this.$el.prepend(`<span class="hidden shading-box">shading: </span>`);
 
     // check for any instance of shading
     if (this.checkFor('asp', 'yes')) this.$el.append(`<div class="asp"></div>`);
@@ -152,7 +152,7 @@ const ItemView = Backbone.View.extend({
       this.$el.append(new IndividualItem({
         model: x
       }).el);
-    })
+    });
     return this;
   }
 });

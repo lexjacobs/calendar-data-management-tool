@@ -14,7 +14,7 @@ export const EditView = Backbone.View.extend({
   render() {
     this.$el.html(this.editBlock.el);
   }
-})
+});
 
 const EditBlock = Backbone.View.extend({
   initialize() {
@@ -115,7 +115,7 @@ const TimingBlockContainer = Backbone.View.extend({
     this.model.get('timing').forEach(x => {
       this.$el.append(new TimingPill({
         timingString: x
-      }).el)
+      }).el);
     });
     return this;
   }
@@ -140,4 +140,4 @@ const TimingPill = Backbone.View.extend({
     this.$el.html(`${this.options.timingString}<i class="glyphicon glyphicon-remove"></i>`);
     return this;
   }
-})
+});

@@ -63,7 +63,7 @@ const Database = Backbone.Collection.extend({
   answer(event, cb) {
     console.log('database collection heard', event, cb);
     events.set(this.toJSON());
-    this.trigger('updated')
+    this.trigger('updated');
   },
   model: eventModel
 });

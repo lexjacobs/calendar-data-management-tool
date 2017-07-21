@@ -24,7 +24,7 @@ export default function dailyViews(start, end) {
     collectionOfEventsByFullDate.add({
       events: extractEvents(start),
       date: moment(start.clone())
-    })
+    });
     start = start.add(1, 'd');
   }
 

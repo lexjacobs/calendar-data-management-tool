@@ -35,7 +35,7 @@ const IndividualEventBlock = Backbone.View.extend({
     }, this);
     return this;
   }
-})
+});
 
 const IndividualEvent = Backbone.View.extend({
   initialize() {
@@ -78,7 +78,7 @@ const IndividualEvent = Backbone.View.extend({
     `);
     return this;
   }
-})
+});
 
 const FilterChooser = Backbone.View.extend({
   initialize() {
@@ -95,7 +95,7 @@ const FilterChooser = Backbone.View.extend({
     let clickTarget = $(e.target).data('repeat');
     if (clickTarget === undefined) return null;
     if (clickTarget === 'all') {
-      this.model.set({'filter': {}})
+      this.model.set({'filter': {}});
     } else {
       this.model.set({'filter': {repeat: clickTarget}});
     }
