@@ -60,7 +60,7 @@ const EditBlock = Backbone.View.extend({
     </label><br>
 
     <label>shading:<br>
-      <select class="form-control name="shading">
+      <select class="form-control" name="shading">
         <option ${this.model.get('shading') === 'none' ? 'selected' : ''} value="none">none</option>
         <option ${this.model.get('shading') === 'full' ? 'selected' : ''} value="full">full</option>
         <option ${this.model.get('shading') === 'bars' ? 'selected' : ''} value="bars">horizontal bars</option>
@@ -69,7 +69,7 @@ const EditBlock = Backbone.View.extend({
     </label><br>
 
     <label>asp:<br>
-      <select class="form-control name="asp">
+      <select class="form-control" name="asp">
         <option ${this.model.get('asp') === 'no' ? 'selected' : ''} value="no">no</option>
         <option ${this.model.get('asp') === 'yes' ? 'selected' : ''} value="yes">yes</option>
       </select>
