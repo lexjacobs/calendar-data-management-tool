@@ -7,14 +7,18 @@ const EditModal = Backbone.View.extend({
     this.render();
     this.listenTo(this, 'updateEditView', this.updateEditView);
   },
-  updateEditView(cid) {
+  updateEditView(model) {
     this.$el.find('.modal-body').html('');
     this.$el.find('.modal-body').append(new EditView({
-      cid
+      model
     }).el);
   },
   events: {
     'submit': 'handleClick'
+  },
+  handleClick(e) {
+    console.log('editModal handle click');
+    e.preventDefault();
   },
   render() {
     this.$el.html('');
@@ -30,7 +34,7 @@ const EditModal = Backbone.View.extend({
 
             </div>
             <div class="modal-footer">
-              <button class="btn btn-primary" data-dismiss="modal">Close Edit Menu</button>
+              <button class="btn btn-primary" data-dismiss="modal">Close Edit Menu Without Update</button>
             </div>
 
           </div>

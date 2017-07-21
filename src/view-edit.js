@@ -1,4 +1,5 @@
 import Backbone from 'backbone';
+import moment from 'moment';
 import $ from 'jquery';
 import database from './collection-database';
 import './css-edit.css';
@@ -8,7 +9,7 @@ export const EditView = Backbone.View.extend({
     this.collection = database;
     this.options = options;
     this.editBlock = new EditBlock({
-      model: this.collection.get(options.cid)
+      model: this.model
     });
     this.render();
   },
@@ -23,7 +24,7 @@ const EditBlock = Backbone.View.extend({
     this.listenTo(this.model, 'change', this.renderClose);
   },
   events: {
-    'submit': 'handleSubmit',
+    'click button.update-form': 'handleSubmit',
   },
   renderClose() {
     console.log('renderClose');
@@ -44,6 +45,9 @@ const EditBlock = Backbone.View.extend({
     formResult.timing = timingResult;
     console.log('formResult', formResult);
     this.model.set(formResult);
+    // OOPS - timings are not being synchronized between this.model.timing and this.model.attributes.timing
+    this.model.mapTimingFromAttributeToCollection();
+    console.log('this.model', this.model);
   },
   render() {
     this.$el.html('');
@@ -54,7 +58,7 @@ const EditBlock = Backbone.View.extend({
       <textarea class="event-text" name="text" rows="3" cols="70" type="text-box">${this.model.get('text')}</textarea>
     </label><br>
 
-    <label>Dates (click to delete):<br>
+    <label>Dates (click<i class="glyphicon glyphicon-remove"></i> to delete):<br>
       <div class="timingBlocks"></div><br>
     </label><br>
 
@@ -103,7 +107,7 @@ const EditBlock = Backbone.View.extend({
       </select>
     </label><br>
     <br>
-    <button type='submit' class="btn btn-primary btn-lg">Update</button>
+    <button type='button' class="btn btn-primary btn-lg update-form">Update</button>
 
     <button data-dismiss="modal" type='button' class="hidden btn btn-success btn-lg closeModal">Update Successful. Click to close</button>
 
@@ -118,7 +122,21 @@ const EditBlock = Backbone.View.extend({
 
 const TimingBlockContainer = Backbone.View.extend({
   initialize() {
+    this.addTimingBlock = new AddTimingBlock({
+      model: this.model
+    });
+    this.listenTo(this.addTimingBlock, 'submitNewDate', this.addNewDate);
     this.render();
+  },
+  addNewDate() {
+    let newDate = $('.date-input-block').serializeArray();
+    let result = newDate.map(x => {
+      return x.value;
+    }).join('-');
+    this.$el.prepend(new TimingPill({
+      timingString: result
+    }).el);
+    console.log('result', result);
   },
   tagName: 'span',
   render() {
@@ -127,6 +145,47 @@ const TimingBlockContainer = Backbone.View.extend({
         timingString: x
       }).el);
     });
+    this.$el.append(this.addTimingBlock.el);
+    return this;
+  }
+});
+
+const AddTimingBlock = Backbone.View.extend({
+  initialize() {
+    this.render();
+  },
+  events: {
+    submit: 'handleSubmit'
+  },
+  handleSubmit(e) {
+    e.preventDefault();
+    this.trigger('submitNewDate');
+  },
+  render() {
+    this.$el.html('<br>Add New Date:');
+    this.$el.append('<form class="date-input-block"></form>');
+
+    let year = `<label>Year</label>  <input name="year" type="number" min="1000" max="9999" value=${moment().year()} />`;
+    let month = `&nbsp;&nbsp;<label>Month</label>  <input name="month" type="number" min="1" max="12" value="1" />`;
+    let day = `&nbsp;&nbsp;<label>Day</label><input name="day" type="number" min="1" max="31" value="1" />`;
+    let repeat = this.model.get('repeat');
+
+    if (repeat === 'banner') {
+      this.$el.find('.date-input-block').append(month);
+    }
+    if (repeat === 'annual') {
+      this.$el.find('.date-input-block').append(month);
+      this.$el.find('.date-input-block').append(day);
+    }
+    if (repeat === 'variable') {
+      this.$el.find('.date-input-block').append(year);
+      this.$el.find('.date-input-block').append(month);
+      this.$el.find('.date-input-block').append(day);
+    }
+
+    this.$el.find('.date-input-block').append(`
+      <button class="add-new-date btn btn-sm btn-primary" type="submit">Add</button>
+    `);
     return this;
   }
 });
@@ -137,7 +196,7 @@ const TimingPill = Backbone.View.extend({
     this.render();
   },
   events: {
-    'click': 'handleClick'
+    'click span.timing-pill': 'handleClick'
   },
   handleClick(e) {
     console.log('timing pill handle click', e);
@@ -147,7 +206,7 @@ const TimingPill = Backbone.View.extend({
   tagName: 'button',
   className: 'btn btn-sm btn-danger timingPill',
   render() {
-    this.$el.html(`${this.options.timingString}<i class="glyphicon glyphicon-remove"></i>`);
+    this.$el.html(`<span class='timing-pill'>${this.options.timingString}<i class="glyphicon glyphicon-remove"></i></span>`);
     return this;
   }
 });

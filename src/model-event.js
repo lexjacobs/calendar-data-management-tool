@@ -21,6 +21,9 @@ timing: [{ m: 9 }]
 
 export const EventModel = Backbone.Model.extend({
   initialize() {
+    this.mapTimingFromAttributeToCollection();
+  },
+  mapTimingFromAttributeToCollection() {
 
     // map to transform persisted 'timing' array
     // into a Backbone Collection, with

@@ -27,8 +27,8 @@ export const EventsView = Backbone.View.extend({
     this.$el.append(this.editModal.el);
     return this;
   },
-  handleUpdateEventModal(e) {
-    this.editModal.trigger('updateEditView', e);
+  handleUpdateEventModal(model) {
+    this.editModal.trigger('updateEditView', model);
   }
 });
 
@@ -60,7 +60,7 @@ const IndividualEvent = Backbone.View.extend({
     'click .deleteButton': 'deleteRecord',
   },
   editEvent() {
-    this.collection.trigger('updateEditModal', this.model.cid);
+    this.collection.trigger('updateEditModal', this.model);
   },
   deleteRecord() {
     if (window.confirm(`confirm deletion of ${this.model.get('text')}`)) {
