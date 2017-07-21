@@ -26,20 +26,20 @@ const annualEvents = [
     timing: ['9-1'],
     repeat: annual
   },
-  // {
-  //   text: "test event1",
-  //   timing: ['9-3'],
-  //   repeat: annual,
-  //   proclamation: 'yes',
-  //   previousSundown: 'yes'
-  // },
-  // {
-  //   text: "test event2",
-  //   timing: ['9-4'],
-  //   repeat: annual,
-  //   proclamation: 'no',
-  //   previousSundown: 'no'
-  // },
+  {
+    text: "test event1",
+    timing: ['9-3'],
+    repeat: annual,
+    proclamation: 'yes',
+    previousSundown: 'yes'
+  },
+  {
+    text: "test event2",
+    timing: ['9-4'],
+    repeat: annual,
+    proclamation: 'no',
+    previousSundown: 'no'
+  },
   {
     text: "test event3",
     timing: ['9-5'],

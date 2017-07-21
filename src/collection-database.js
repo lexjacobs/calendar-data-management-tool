@@ -70,11 +70,4 @@ const Database = Backbone.Collection.extend({
 
 const database = new Database();
 
-// // initialize on load
-// events.once('value', (snapshot) => {
-//   console.log('database values', snapshot.val());
-//   database.reset();
-//   database.add(snapshot.val());
-// });
-
 export default database;
