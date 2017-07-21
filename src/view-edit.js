@@ -20,9 +20,14 @@ export const EditView = Backbone.View.extend({
 const EditBlock = Backbone.View.extend({
   initialize() {
     this.render();
+    this.listenTo(this.model, 'change', this.renderClose);
   },
   events: {
     'submit': 'handleSubmit',
+  },
+  renderClose() {
+    console.log('renderClose');
+    this.$el.find('.closeModal').removeClass('hidden');
   },
   handleSubmit(e) {
     e.preventDefault();
@@ -98,7 +103,10 @@ const EditBlock = Backbone.View.extend({
       </select>
     </label><br>
     <br>
-    <button type='submit' class="btn btn-success btn-lg">Update</button>
+    <button type='submit' class="btn btn-primary btn-lg">Update</button>
+
+    <button data-dismiss="modal" type='button' class="hidden btn btn-success btn-lg closeModal">Update Successful. Click to close</button>
+
     </form>
     `);
     this.$el.find('.timingBlocks').html(new TimingBlockContainer({

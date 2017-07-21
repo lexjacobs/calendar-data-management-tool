@@ -14,10 +14,7 @@ const EditModal = Backbone.View.extend({
     }).el);
   },
   events: {
-    'click button.submit': 'handleClick'
-  },
-  handleClick() {
-    console.log('heard click');
+    'submit': 'handleClick'
   },
   render() {
     this.$el.html('');
@@ -32,6 +29,10 @@ const EditModal = Backbone.View.extend({
             <div class="modal-body">
 
             </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary" data-dismiss="modal">Close Edit Menu</button>
+            </div>
+
           </div>
         </div>
       </div>
