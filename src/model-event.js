@@ -1,5 +1,5 @@
 import Backbone from 'backbone';
-// import _ from 'underscore';
+import _ from 'underscore';
 import moment from 'moment';
 window.moment = moment;
 
@@ -19,14 +19,14 @@ timing: [{ m: 9 }]
 
  */
 
-const eventModel = Backbone.Model.extend({
+export const EventModel = Backbone.Model.extend({
   initialize() {
 
     // map to transform persisted 'timing' array
     // into a Backbone Collection, with
     // mapped date strings => objects, as above
     // NOT saving in attributes, but as a property
-    this.timing = new Backbone.Collection(this.get('timing').map(x => timingMapper(x, this.get('repeat'))));
+    this.timing = new Backbone.Collection(this.get('timing').map(x => this.timingMapper(x, this.get('repeat'))));
   },
   defaults: {
     text: "This is where you enter the text that you want to show up on the calendar on the selected day / days.",
@@ -38,26 +38,52 @@ const eventModel = Backbone.Model.extend({
     proclamation: 'no',
     previousSundown: 'no'
   },
-  serializeTiming() {
-    console.log('timing', this.timing);
-    this.set('timing', this.timing.models.map(x => {
-      return [x.get('y'), x.get('m'), x.get('d')].join('-');
-    }));
-  },
-  // method for adding string timings after initialization
   addNewTiming(date) {
-    this.timing.add(timingMapper(date, this.get('repeat')));
+    // method for adding string timings after initialization
+    this.timing.add(this.timingMapper(date, this.get('repeat')));
 
     // changes to collection need to be persisted to model attributes hash
-    this.serializeTiming();
+    this.set('timing', this.serializeTiming(this.timing.models, this.get('repeat')));
+    this.trigger('change', this);
+  },
+  removeTiming(dateString) {
+    // method for removing string timings after initialization
+    let timingObject = this.timingMapper(dateString, this.get('repeat'));
+    let removalObject = _.first(this.timing.where(timingObject));
+
+    // persist changes to collection to model attributes hash
+    removalObject &&  this.timing.remove(removalObject.cid);
+    this.set('timing', this.serializeTiming(this.timing.models, this.get('repeat')));
     this.trigger('change', this);
   }
 });
 
-export function timingMapper(dateString, repetition) {
+EventModel.prototype.timingMapper = timingMapper;
+EventModel.prototype.serializeTiming = serializeTiming;
+
+export function serializeTiming(model, repeat) {
+  if (repeat === 'annual') {
+    return model.map(x => {
+      return [x.get('m'), x.get('d')].join('-');
+    });
+  } else if (repeat === 'variable') {
+    return model.map(x => {
+      return [x.get('y'), x.get('m'), x.get('d')].join('-');
+    });
+  } else if (repeat === 'banner') {
+    return model.map(x => {
+      return `${x.get('m')}`;
+    });
+  } else {
+    console.error('serializeTiming fell through');
+    return null;
+  }
+}
+
+export function timingMapper(dateString, repeat) {
 
   // map a month, day, year
-  if (repetition === 'variable') {
+  if (repeat === 'variable') {
     let dateObject = moment(dateString, 'YYYY-M-D');
     return {
       m: +dateObject.month() + 1,
@@ -67,7 +93,7 @@ export function timingMapper(dateString, repetition) {
   }
 
   // don't map a year for annual occurrences
-  if (repetition === 'annual') {
+  if (repeat === 'annual') {
     let dateObject = moment(dateString, 'M-D');
     return {
       m: +dateObject.month() + 1,
@@ -76,7 +102,7 @@ export function timingMapper(dateString, repetition) {
   }
 
   // map month only for banner occurrences
-  if (repetition === 'banner') {
+  if (repeat === 'banner') {
     let dateObject = moment(dateString, 'M');
     return {
       m: +dateObject.month() + 1
@@ -84,4 +110,4 @@ export function timingMapper(dateString, repetition) {
   }
 }
 
-export default eventModel;
+export default EventModel;

@@ -14,9 +14,9 @@ var events = Firebase.database().ref('events');
 // test: change the event timing
 
 // var test = new eventModel({
-//   text: 'test event for half shading',
-//   timing: ['2016-9-4'],
-//   repeat: 'variable',
+//   text: 'test event banner repeat',
+//   timing: ['10'],
+//   repeat: 'banner',
 //   shading: 'diagonal',
 //   mlh: 'yes',
 //   proclamation: 'yes',
@@ -33,8 +33,8 @@ var events = Firebase.database().ref('events');
 // setTimeout(function () {
 //   console.log('timout 2');
 //   // database.last().set('text', 'event model sample text changed')
-//     database.last().addNewTiming(['2016-9-5']);
-//     database.last().addNewTiming(['2016-9-6']);
+//     database.last().addNewTiming(['9']);
+//     database.last().addNewTiming(['11']);
 // }, 5000);
 //
 //
