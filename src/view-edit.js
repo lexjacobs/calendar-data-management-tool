@@ -9,7 +9,8 @@ export const EditView = Backbone.View.extend({
     this.collection = database;
     this.options = options;
     this.editBlock = new EditBlock({
-      model: this.model
+      model: this.model,
+      variant: this.options.variant
     });
     this.render();
   },
@@ -19,12 +20,14 @@ export const EditView = Backbone.View.extend({
 });
 
 const EditBlock = Backbone.View.extend({
-  initialize() {
+  initialize(options) {
+    this.options = options;
     this.render();
     this.listenTo(this.model, 'change', this.renderClose);
   },
   events: {
     'click button.update-form': 'handleSubmit',
+    'change .selectRepeat': 'handleSelectRepeat'
   },
   renderClose() {
     console.log('renderClose');
@@ -33,6 +36,11 @@ const EditBlock = Backbone.View.extend({
   handleSubmit(e) {
     e.preventDefault();
     this.composeEventUpdate();
+  },
+  handleSelectRepeat(e) {
+    console.log('select changed', e.target.value);
+    this.model.set('repeat', e.target.value, {silent: true});
+    this.renderTimingBlocks();
   },
   composeEventUpdate() {
     let timingResult = [];
@@ -45,11 +53,23 @@ const EditBlock = Backbone.View.extend({
     formResult.timing = timingResult;
     console.log('formResult', formResult);
     this.model.set(formResult);
-    // OOPS - timings are not being synchronized between this.model.timing and this.model.attributes.timing
     this.model.mapTimingFromAttributeToCollection();
     console.log('this.model', this.model);
   },
+  renderTimingBlocks() {
+    this.$el.find('.timing-block-container').html(`
+    <label>Dates (click<i class="glyphicon glyphicon-remove"></i> to delete):<br>
+      <div class="timingBlocks"></div><br>
+    </label><br>
+    `);
+
+    this.$el.find('.timingBlocks').html(new TimingBlockContainer({
+      model: this.model
+    }).el);
+
+  },
   render() {
+    let variant = this.options.variant;
     this.$el.html('');
     this.$el.append(`
     <form class="editBlock">
@@ -58,17 +78,15 @@ const EditBlock = Backbone.View.extend({
       <textarea class="event-text" name="text" rows="3" cols="70" type="text-box">${this.model.get('text')}</textarea>
     </label><br>
 
-    <label>Dates (click<i class="glyphicon glyphicon-remove"></i> to delete):<br>
-      <div class="timingBlocks"></div><br>
+    <label>repeat pattern: ${variant === 'add' ? '' : '(delete event and re-create to change)'}<br>
+    <select ${variant === 'add' ? '' : 'disabled'} class="form-control selectRepeat" name="repeat">
+    <option ${this.model.get('repeat') === 'annual' ? 'selected' : ''} value="annual">annual</option>
+    <option ${this.model.get('repeat') === 'variable' ? 'selected' : ''} value="variable">variable</option>
+    <option ${this.model.get('repeat') === 'banner' ? 'selected' : ''} value="banner">calendar month heading</option>
+    </select>
     </label><br>
 
-    <label>repeat pattern: (delete event and re-create to change)<br>
-      <select disabled class="form-control" name="repeat">
-        <option ${this.model.get('repeat') === 'annual' ? 'selected' : ''} value="annual">annual</option>
-        <option ${this.model.get('repeat') === 'variable' ? 'selected' : ''} value="variable">variable</option>
-        <option ${this.model.get('repeat') === 'banner' ? 'selected' : ''} value="banner">calendar month heading</option>
-      </select>
-    </label><br>
+    <div class="timing-block-container"></div>
 
     <label>shading:<br>
       <select class="form-control" name="shading">
@@ -113,9 +131,8 @@ const EditBlock = Backbone.View.extend({
 
     </form>
     `);
-    this.$el.find('.timingBlocks').html(new TimingBlockContainer({
-      model: this.model
-    }).el);
+
+    this.renderTimingBlocks();
     return this;
   }
 });

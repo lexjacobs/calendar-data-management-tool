@@ -5,6 +5,7 @@ import { router } from './index';
 import './css-events.css';
 import database from './collection-database';
 import EditModal from './view-editModal';
+import AddModal from './view-addModal';
 
 export const EventsView = Backbone.View.extend({
   initialize() {
@@ -17,15 +18,32 @@ export const EventsView = Backbone.View.extend({
     this.editModal = new EditModal({
       collection: this.collection
     });
+    this.addModal = new AddModal({
+      collection: this.collection
+    });
     this.render();
     this.listenTo(this.collection, 'updateEditModal', this.handleUpdateEventModal);
   },
   render() {
     this.$el.html('');
+    this.$el.append(`
+      <br>
+      <!-- Button trigger modal -->
+      <button type="button" class="btn btn-primary btn-lg addEvent" data-toggle="modal" data-target="#addModal">
+      Add New Event
+      </button>
+      `);
     this.$el.append(this.filterChooser.el);
     this.$el.append(this.individualEventBlock.el);
     this.$el.append(this.editModal.el);
+    this.$el.append(this.addModal.el);
     return this;
+  },
+  events: {
+    'click .addEvent': 'handleAddEventModal'
+  },
+  handleAddEventModal() {
+    this.addModal.trigger('updateAddView');
   },
   handleUpdateEventModal(model) {
     this.editModal.trigger('updateEditView', model);
