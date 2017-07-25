@@ -88,9 +88,6 @@ const IndividualEvent = Backbone.View.extend({
       console.log(`Not deleting ${this.model.get('text')}`);
     }
   },
-  openEditRoute() {
-    router.navigate(`#/edit/${this.model.cid}`);
-  },
   render() {
     this.$el.html(`
     <!-- Button trigger modal -->
