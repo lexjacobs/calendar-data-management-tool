@@ -2,12 +2,46 @@
 import Backbone from 'backbone';
 import { timingMapper, serializeTiming, EventModel } from './model-event';
 
+test('it properly removes a timing from the timing property, and maps the result properly to the timing attribute', () => {
+  let testModel = new EventModel({
+    timing: ['1', '2', '3', '4', '5'],
+    repeat: 'banner'
+  });
+
+  expect(testModel.get('timing')).toEqual(['1', '2', '3', '4', '5']);
+  expect(testModel.timing.models.length).toBe(5);
+  testModel.removeTimingByIndex(2);
+  expect(testModel.timing.models.length).toBe(4);
+  expect(testModel.get('timing')).toEqual(['1', '2', '4', '5']);
+  testModel.removeTimingByIndex(2);
+  expect(testModel.timing.models.length).toBe(3);
+  expect(testModel.get('timing')).toEqual(['1', '2', '5']);
+  testModel.removeTimingByIndex(2);
+  expect(testModel.timing.models.length).toBe(2);
+  expect(testModel.get('timing')).toEqual(['1', '2']);
+  testModel.removeTimingByIndex(2);
+  expect(testModel.timing.models.length).toBe(2);
+  expect(testModel.get('timing')).toEqual(['1', '2']);
+  testModel.removeTimingByIndex(2);
+  expect(testModel.timing.models.length).toBe(2);
+  expect(testModel.get('timing')).toEqual(['1', '2']);
+  testModel.removeTimingByIndex(0);
+  expect(testModel.timing.models.length).toBe(1);
+  expect(testModel.get('timing')).toEqual(['2']);
+  testModel.removeTimingByIndex(0);
+  expect(testModel.timing.models.length).toBe(0);
+  expect(testModel.get('timing')).toEqual([]);
+  testModel.removeTimingByIndex(0);
+  expect(testModel.timing.models.length).toBe(0);
+  expect(testModel.get('timing')).toEqual([]);
+});
+
 test('it properly adds and removes banner time blocks', () => {
   let testModel = new EventModel({
     timing: ['9'],
     repeat: 'banner'
   });
-  expect(testModel.get('timing')).toEqual(['9'])
+  expect(testModel.get('timing')).toEqual(['9']);
   testModel.addNewTiming('10');
   expect(testModel.get('timing')).toEqual(['9', '10']);
   testModel.addNewTiming('10');

@@ -58,7 +58,13 @@ export const EventModel = Backbone.Model.extend({
     removalObject &&  this.timing.remove(removalObject.cid);
     this.set('timing', this.serializeTiming(this.timing.models, this.get('repeat')));
     this.trigger('change', this);
-  }
+  },
+  removeTimingByIndex(index) {
+    
+    // don't remove nonexistent models
+    this.timing.at(index) && this.timing.remove(this.timing.at(index).cid);
+    this.set('timing', this.serializeTiming(this.timing.models, this.get('repeat')));
+  },
 });
 
 EventModel.prototype.timingMapper = timingMapper;
