@@ -2,6 +2,7 @@ import $ from 'jquery';
 import Backbone from 'backbone';
 import { SortView } from './view-sort';
 import { EventsView } from './view-events';
+import { Login } from './view-login';
 
 var ViewManager = {
   currentView : null,
@@ -20,9 +21,17 @@ var ViewManager = {
 
 const ApplicationRouter = Backbone.Router.extend({
   routes: {
-    "sort": "sort",
     "events": "events",
+    "login": "login",
+    "sort": "sort",
     "*default": "events"
+  },
+
+  login() {
+
+    $('#root').html(ViewManager.showView(Login));
+    $('ul.nav-pills > li').removeClass('active');
+    $('ul.nav-pills > li.nav-item.login').addClass('active');
   },
 
   sort() {

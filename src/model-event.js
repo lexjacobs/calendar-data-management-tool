@@ -1,7 +1,6 @@
 import Backbone from 'backbone';
 import _ from 'underscore';
 import moment from 'moment';
-window.moment = moment;
 
 /*
 maps from timing: ['2016-9-1','2016-9-2'] ==>
@@ -32,7 +31,7 @@ export const EventModel = Backbone.Model.extend({
     this.timing = new Backbone.Collection(this.get('timing').map(x => this.timingMapper(x, this.get('repeat'))));
   },
   defaults: {
-    text: "This is where you enter the text that you want to show up on the calendar on the selected day / days.",
+    text: '',
     timing: [],
     repeat: 'variable',
     shading: 'none',
@@ -60,7 +59,7 @@ export const EventModel = Backbone.Model.extend({
     this.trigger('change', this);
   },
   removeTimingByIndex(index) {
-    
+
     // don't remove nonexistent models
     this.timing.at(index) && this.timing.remove(this.timing.at(index).cid);
     this.set('timing', this.serializeTiming(this.timing.models, this.get('repeat')));

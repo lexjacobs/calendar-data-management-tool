@@ -3,16 +3,46 @@ import Backbone from 'backbone';
 import ApplicationRouter from './router';
 import { Firebase } from './firebase';
 import database from './collection-database';
+import Logout from './view-logout';
 
-console.log('initializing router');
+var LOGGED_IN = false;
+
 export const router = new ApplicationRouter();
 
-// initialize on load
-var events = Firebase.database().ref('events');
-events.once('value', (snapshot) => {
-  console.log('database values', snapshot.val());
-  database.reset();
-  database.add(snapshot.val());
-  console.log('starting Backbone history');
-  Backbone.history.start();
+Backbone.history.start();
+
+const logout = new Logout({
+  el: '#logout-container'
+});
+
+Firebase.auth().onAuthStateChanged(function (user) {
+
+  if (user) {
+    LOGGED_IN = true;
+    logout.model.set({
+      authorized: true
+    });
+
+    var events = Firebase.database().ref('events');
+    events.once('value', (snapshot) => {
+      database.reset();
+      database.add(snapshot.val());
+      router.navigate('#/events');
+    });
+
+  } else {
+    LOGGED_IN = false;
+    database.reset();
+    logout.model.set({
+      authorized: false
+    });
+    router.navigate('#/login');
+  }
+});
+
+
+router.on('route', function(){
+  if (!LOGGED_IN) {
+    this.navigate('#/login');
+  }
 });

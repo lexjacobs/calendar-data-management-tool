@@ -1,7 +1,6 @@
 import Backbone from 'backbone';
 import _ from 'underscore';
 import $ from 'jquery';
-import { router } from './index';
 import './css-events.css';
 import database from './collection-database';
 import EditModal from './view-editModal';

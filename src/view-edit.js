@@ -72,14 +72,14 @@ const EditBlock = Backbone.View.extend({
     <form class="editBlock">
 
     <label>event text:<br>
-      <textarea class="event-text" name="text" rows="3" cols="70" type="text-box">${this.model.get('text')}</textarea>
+      <textarea placeholder="Enter event text here" class="event-text" name="text" rows="3" cols="70" type="text-box">${this.model.get('text')}</textarea>
     </label><br>
 
     <label>repeat pattern: ${variant === 'add' ? '' : '(delete event and re-create to change)'}<br>
     <select ${variant === 'add' ? '' : 'disabled'} class="form-control selectRepeat" name="repeat">
-    <option ${this.model.get('repeat') === 'annual' ? 'selected' : ''} value="annual">annual</option>
-    <option ${this.model.get('repeat') === 'variable' ? 'selected' : ''} value="variable">variable</option>
-    <option ${this.model.get('repeat') === 'banner' ? 'selected' : ''} value="banner">calendar month heading</option>
+    <option ${this.model.get('repeat') === 'annual' ? 'selected' : ''} value="annual">Same Date Annually</option>
+    <option ${this.model.get('repeat') === 'variable' ? 'selected' : ''} value="variable">Date Changes Annually</option>
+    <option ${this.model.get('repeat') === 'banner' ? 'selected' : ''} value="banner">Calendar Month Heading Information</option>
     </select>
     </label><br>
 
