@@ -15,13 +15,6 @@ const AddModal = Backbone.View.extend({
       variant: 'add'
     }).el);
   },
-  events: {
-    'submit': 'handleClick'
-  },
-  handleClick(e) {
-    console.log('addModal handle click');
-    e.preventDefault();
-  },
   render() {
     this.$el.html('');
     this.$el.append(`
@@ -36,7 +29,7 @@ const AddModal = Backbone.View.extend({
 
             </div>
             <div class="modal-footer">
-              <button class="btn btn-primary" data-dismiss="modal">Close Add Menu Without Update</button>
+              <button type="button" class="btn btn-primary" data-dismiss="modal">Close Add Menu Without Update</button>
             </div>
 
           </div>

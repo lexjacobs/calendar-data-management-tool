@@ -30,7 +30,6 @@ const EditBlock = Backbone.View.extend({
     'change .selectRepeat': 'handleSelectRepeat'
   },
   renderClose() {
-    console.log('renderClose');
     this.$el.find('.closeModal').removeClass('hidden');
   },
   handleSubmit(e) {
@@ -38,8 +37,9 @@ const EditBlock = Backbone.View.extend({
     this.composeEventUpdate();
   },
   handleSelectRepeat(e) {
-    console.log('select changed', e.target.value);
     this.model.set('repeat', e.target.value, {silent: true});
+    this.model.set('timing', []);
+    this.model.mapTimingFromAttributeToCollection();
     this.renderTimingBlocks();
   },
   composeEventUpdate() {
@@ -55,15 +55,12 @@ const EditBlock = Backbone.View.extend({
     this.model.set(formResult);
     this.model.mapTimingFromAttributeToCollection();
     console.log('this.model', this.model);
+
+    // add a new event model to database, will ignore existing model
+    database.add(this.model);
   },
   renderTimingBlocks() {
-    this.$el.find('.timing-block-container').html(`
-    <label>Dates (click<i class="glyphicon glyphicon-remove"></i> to delete):<br>
-      <div class="timingBlocks"></div><br>
-    </label><br>
-    `);
-
-    this.$el.find('.timingBlocks').html(new TimingBlockContainer({
+    this.$el.find('.timing-block-container').html(new TimingBlockContainer({
       model: this.model
     }).el);
 
@@ -86,7 +83,9 @@ const EditBlock = Backbone.View.extend({
     </select>
     </label><br>
 
-    <div class="timing-block-container"></div>
+    <label>Add New Date:<br>
+    <div class="timing-block-container"></div><br>
+    </label><br>
 
     <label>shading:<br>
       <select class="form-control" name="shading">
@@ -145,24 +144,42 @@ const TimingBlockContainer = Backbone.View.extend({
     this.listenTo(this.addTimingBlock, 'submitNewDate', this.addNewDate);
     this.render();
   },
-  addNewDate() {
-    let newDate = $('.date-input-block').serializeArray();
-    let result = newDate.map(x => {
+  events: {
+    'click .timingPill': 'clickedTimingPillToRemove'
+  },
+  clickedTimingPillToRemove(e) {
+
+    // in case click registers on glyphicon-remove:
+    if (!e.target.innerText) {
+      e.target = e.target.parentElement;
+    }
+
+    let indexToRemove = this.$el.find('.timing-pill-container').find('.timing-pill-wrapper').index(e.target);
+    this.model.removeTimingByIndex(indexToRemove);
+    this.renderTimingPills();
+  },
+  addNewDate(newDate) {
+    let dateString = newDate.map(x => {
       return x.value;
     }).join('-');
-    this.$el.prepend(new TimingPill({
-      timingString: result
-    }).el);
-    console.log('result', result);
+    this.model.addNewTiming(dateString);
+    this.renderTimingPills();
   },
   tagName: 'span',
-  render() {
+  renderTimingPills() {
+    $('.timing-pill-container').html('');
     this.model.get('timing').forEach(x => {
-      this.$el.append(new TimingPill({
+      this.$el.find('.timing-pill-container').append(new TimingPill({
         timingString: x
       }).el);
     });
+  },
+  render() {
+    this.$el.html('');
     this.$el.append(this.addTimingBlock.el);
+    this.$el.append(`<br>Dates (click<i class="glyphicon glyphicon-remove"></i> to delete)<br>`);
+    this.$el.append('<span class="timing-pill-container"></span>');
+    this.renderTimingPills();
     return this;
   }
 });
@@ -172,14 +189,15 @@ const AddTimingBlock = Backbone.View.extend({
     this.render();
   },
   events: {
-    submit: 'handleSubmit'
+    'submit .date-input-block': 'handleSubmit'
   },
   handleSubmit(e) {
     e.preventDefault();
-    this.trigger('submitNewDate');
+    let date = this.$el.find('.date-input-block').serializeArray();
+    this.trigger('submitNewDate', date);
   },
   render() {
-    this.$el.html('<br>Add New Date:');
+    this.$el.html('');
     this.$el.append('<form class="date-input-block"></form>');
 
     let year = `<label>Year</label>  <input name="year" type="number" min="1000" max="9999" value=${moment().year()} />`;
@@ -212,18 +230,10 @@ const TimingPill = Backbone.View.extend({
     this.options = options;
     this.render();
   },
-  events: {
-    'click span.timing-pill': 'handleClick'
-  },
-  handleClick(e) {
-    console.log('timing pill handle click', e);
-    let remove = this.$el.index();
-    $('.timingPill').eq(remove).remove();
-  },
-  tagName: 'button',
-  className: 'btn btn-sm btn-danger timingPill',
+  tagName: 'span',
+  className: 'timingPill',
   render() {
-    this.$el.html(`<span class='timing-pill'>${this.options.timingString}<i class="glyphicon glyphicon-remove"></i></span>`);
+    this.$el.html(`<button type="button" class="btn btn-sm btn-danger timing-pill-wrapper">${this.options.timingString}<i class="glyphicon glyphicon-remove"></i></button>`);
     return this;
   }
 });
