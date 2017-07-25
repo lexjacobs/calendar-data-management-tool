@@ -26,7 +26,7 @@ const EditBlock = Backbone.View.extend({
     this.listenTo(this.model, 'change', this.renderClose);
   },
   events: {
-    'click button.update-form': 'handleSubmit',
+    'submit .editBlock': 'handleSubmit',
     'change .selectRepeat': 'handleSelectRepeat'
   },
   renderClose() {
@@ -72,7 +72,7 @@ const EditBlock = Backbone.View.extend({
     <form class="editBlock">
 
     <label>event text:<br>
-      <textarea placeholder="Enter event text here" class="event-text" name="text" rows="3" cols="70" type="text-box">${this.model.get('text')}</textarea>
+      <textarea required placeholder="Enter event text here" class="event-text" name="text" rows="3" cols="70" type="text-box">${this.model.get('text')}</textarea>
     </label><br>
 
     <label>repeat pattern: ${variant === 'add' ? '' : '(delete event and re-create to change)'}<br>
@@ -124,9 +124,9 @@ const EditBlock = Backbone.View.extend({
       </select>
     </label><br>
     <br>
-    <button type='button' class="btn btn-primary btn-lg update-form">Update</button>
+    <button type='submit' class="btn btn-primary btn-lg update-form">${variant === 'add' ? 'Add New Event' : 'Update Event'}</button>
 
-    <button data-dismiss="modal" type='button' class="hidden btn btn-success btn-lg closeModal">Update Successful. Click to close</button>
+    <button data-dismiss="modal" type='button' class="hidden btn btn-success btn-lg closeModal">${variant === 'add' ? 'Add' : 'Update'} Successful. Click to close</button>
 
     </form>
     `);
@@ -177,7 +177,7 @@ const TimingBlockContainer = Backbone.View.extend({
   render() {
     this.$el.html('');
     this.$el.append(this.addTimingBlock.el);
-    this.$el.append(`<br>Dates (click<i class="glyphicon glyphicon-remove"></i> to delete)<br>`);
+    this.$el.append(`<br>Event Dates (click<i class="glyphicon glyphicon-remove"></i> to delete):<br>`);
     this.$el.append('<span class="timing-pill-container"></span>');
     this.renderTimingPills();
     return this;

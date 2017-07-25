@@ -1,0 +1,40 @@
+.founder-image {
+  width: 166%;
+}
+
+.align {
+  display: flex;
+  justify-content: center;
+}
+.align-item {
+  align-self: center;
+}
+
+.center-container {
+  position: relative;
+  width: 20%;
+  margin: 26px auto;
+  background-color: lightblue;
+}
+
+.inner-title {
+  position: relative;
+  margin: 19px 79px 0 9px;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.inner-upper {
+  position: relative;
+  margin: 41px 79px 0px 9px;
+}
+
+.inner-upper {
+  font-weight: bold;
+}
+
+.inner-lower {
+  position: relative;
+  margin: 50px 81px 38px 9px;
+}

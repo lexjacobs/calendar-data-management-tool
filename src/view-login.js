@@ -1,13 +1,15 @@
 import Backbone from 'backbone';
 import $ from 'jquery';
 import { Firebase } from './firebase';
+import founder from './assets/founder.png';
+import './css-login.css';
 
 export const Login = Backbone.View.extend({
   initialize() {
     this.render();
   },
   events: {
-    'click .login-button': 'handleSubmit'
+    'submit .login-form': 'handleSubmit'
   },
   handleSubmit(e) {
     e.preventDefault();
@@ -19,7 +21,7 @@ export const Login = Backbone.View.extend({
 
     Firebase.auth().signInWithEmailAndPassword(email, password)
     .then(function (success) {
-      console.log(success);
+      return success;
     })
     .catch(function (error) {
       console.error('auth error');
@@ -32,18 +34,32 @@ export const Login = Backbone.View.extend({
   render() {
     this.$el.html(`
 
-      <div class="container login-container">
-      <form class="login-form">
+      <div class="container center-container">
 
-        <label>username<br>
-          <input required name="username" type="text" />
-        </label><br>
-        <label>password<br>
-          <input required name="password" type="password" />
-        </label><br>
-        <button class="login-button" type="button">Login</button>
+        <div class="inner-title">
+           Natter's<br>Calendar<br>Management<br>Suite
+        </div>
 
-      </form>
+        <div class="inner-upper">
+          <form class="login-form">
+            <p>Login:</p>
+            <label>username<br>
+              <input required name="username" type="text" />
+            </label><br>
+            <label>password<br>
+              <input required name="password" type="password" />
+            </label><br>
+            <button class="login-button" type="submit">Login</button>
+
+          </form>
+        </div>
+
+        <div class="inner-lower">
+          <img class="founder-image" src=${founder} />
+        </div>
+
+
+
       </div>
 
       `);

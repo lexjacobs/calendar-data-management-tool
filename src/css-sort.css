@@ -19,7 +19,7 @@
   content: 'ASP: OFF';
   padding: 0 3px;
   margin-right: 4px;
-  border: 1px solid black;
+  border: 2px solid black;
 }
 
 .mlh::after {
@@ -27,12 +27,12 @@
   content: 'MLH: ON';
   padding: 0 3px;
   margin-right: 4px;
-  border: 1px solid black;
+  border: 2px solid black;
 }
 
 .shading-box {
-  border: 4px solid lightblue;
-  padding: 3 3px;
+  border: 2px solid black;
+  padding: 0 3px;
 }
 
 .previous-sundown {
