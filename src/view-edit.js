@@ -3,6 +3,7 @@ import moment from 'moment';
 import $ from 'jquery';
 import database from './collection-database';
 import './css-edit.css';
+import { serializedObject } from './shared';
 
 export const EditView = Backbone.View.extend({
   initialize(options) {
@@ -46,10 +47,7 @@ const EditBlock = Backbone.View.extend({
     let timingResult = [];
     $('.timingPill').each((x, y) => timingResult.push($(y).text()));
 
-    let formResult = {};
-    this.$el.find('.editBlock').serializeArray().forEach(x => {
-      formResult[x.name] = x.value;
-    });
+    let formResult = serializedObject(this.$el.find('.editBlock').serializeArray());
     formResult.timing = timingResult;
     console.log('formResult', formResult);
     this.model.set(formResult);

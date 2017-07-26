@@ -7,6 +7,7 @@ import database from './collection-database';
 import './css-sort.css';
 
 var START = moment().year() - 1;
+import { serializedAttributes } from './shared.js';
 
 export const SortView = Backbone.View.extend({
   initialize() {
@@ -97,8 +98,10 @@ const DatePicker = Backbone.View.extend({
     'submit': 'setStartEnd',
   },
   setStartEnd(e) {
-    let start = $('.num-year').val();
     e.preventDefault();
+
+    let values = $('.schoolYearChooser').serializeArray();
+    let start = serializedAttributes(values, 'start');
     this.model.set({
       'start': `${start}-09-01`,
       'end': `${+start+1}-09-01`

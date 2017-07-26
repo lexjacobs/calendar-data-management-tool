@@ -3,6 +3,7 @@ import $ from 'jquery';
 import { Firebase } from './firebase';
 import founder from './assets/founder.png';
 import './css-login.css';
+import { serializedAttributes } from './shared';
 
 export const Login = Backbone.View.extend({
   initialize() {
@@ -14,10 +15,10 @@ export const Login = Backbone.View.extend({
   handleSubmit(e) {
     e.preventDefault();
 
-    let loginString = $('form.login-form').serializeArray().map(item => item.value);
+    let loginString = $('form.login-form').serializeArray();
 
-    let email = loginString[0];
-    let password = loginString[1];
+    let email = serializedAttributes(loginString, 'email');
+    let password = serializedAttributes(loginString, 'password');
 
     Firebase.auth().signInWithEmailAndPassword(email, password)
     .then(function (success) {
@@ -44,7 +45,7 @@ export const Login = Backbone.View.extend({
           <form class="login-form">
             <p>Login:</p>
             <label>username<br>
-              <input required name="username" type="text" />
+              <input required name="email" type="text" />
             </label><br>
             <label>password<br>
               <input required name="password" type="password" />
