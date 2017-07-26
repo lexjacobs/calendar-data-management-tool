@@ -5,6 +5,7 @@ import moment from 'moment';
 import dailyViews from './dailyViews';
 import database from './collection-database';
 import './css-sort.css';
+import ordinal from 'ordinal';
 import { serializedObject } from './shared.js';
 
 export const SortView = Backbone.View.extend({
@@ -52,7 +53,7 @@ const SortedViews = Backbone.View.extend({
     this.WEEK_APPENDED_YET = false;
   },
   addEventDate(model) {
-    return `<br>${model.get('date').format('MMM DD, YYYY ddd')}<br>`;
+    return `<br>${model.get('date').format('MMM DD, YYYY ddd')} `;
   },
   addBannerHeading(model) {
     return `<div style="font-size:20px;">${model.get('date').format('MMMM')} ${model.get('date').format('YYYY')} heading:</div>`;
@@ -60,7 +61,7 @@ const SortedViews = Backbone.View.extend({
   countWeek() {
     if(this.WEEK_APPENDED_YET) return '';
     this.WEEK_APPENDED_YET = true;
-    return `<div class="week-count">WEEK: ${++this.COUNT_WEEK}</div>`;
+    return `<span class="week-count"> | ${ordinal(++this.COUNT_WEEK)} WEEK </span>`;
   },
   addCount(dayBlock) {
 
@@ -95,8 +96,8 @@ const SortedViews = Backbone.View.extend({
     // don't count after the last day of school
     if (++this.COUNT > this.model.get('schoolDaysCount')) return null;
 
-    // otherwise, count
-    return `${this.countWeek()} <div class="day-count">DAY: ${this.COUNT} | ${this.model.get('schoolDaysCount') - this.COUNT + 1}</div>`;
+    // otherwise, count DAY and WEEK
+    return `${this.countWeek()} |  <span class="day-count">DAY: ${this.COUNT} / ${this.model.get('schoolDaysCount') - this.COUNT + 1}</span>`;
 
   },
   render() {
@@ -190,10 +191,10 @@ const DatePicker = Backbone.View.extend({
     <label>Month</label>
     <input required name="month" type="number" min="1" max="12" value="9" />
     &nbsp;&nbsp;
-    <label>Day</label><input required name="day" type="number" min="1" max="31" value="1" /></label>
+    <label>Day</label><input required name="day" type="number" min="1" max="31" value="" /></label>
     <br>
     <label>Number of school days
-    <input required type="number" min="1" value="100" name="count"></label><br>
+    <input required type="number" min="1" value="" name="count"></label><br>
 
     <button class='btn num-button' type='submit'>draw sorted list</button>
     <br><br>
