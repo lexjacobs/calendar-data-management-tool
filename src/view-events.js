@@ -81,10 +81,10 @@ const IndividualEvent = Backbone.View.extend({
   },
   deleteRecord() {
     if (window.confirm(`confirm deletion of ${this.model.get('text')}`)) {
-      console.log(`Deleting ${this.model.get('text')}`);
       database.remove(this.model.cid);
+      return null;
     } else {
-      console.log(`Not deleting ${this.model.get('text')}`);
+      return null;
     }
   },
   render() {

@@ -49,10 +49,8 @@ const EditBlock = Backbone.View.extend({
 
     let formResult = serializedObject(this.$el.find('.editBlock').serializeArray());
     formResult.timing = timingResult;
-    console.log('formResult', formResult);
     this.model.set(formResult);
     this.model.mapTimingFromAttributeToCollection();
-    console.log('this.model', this.model);
 
     // add a new event model to database, will ignore existing model
     database.add(this.model);

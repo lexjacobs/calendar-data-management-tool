@@ -22,9 +22,7 @@ const Database = Backbone.Collection.extend({
     events.set(this.toJSON());
     this.trigger('updated');
   },
-  answer(event, cb) {
-    console.log('database collection heard', event, cb);
-
+  answer() {
     // avoid deleting database in case of race condition where client
     // adds to collection prior to db hydrating from firebase
     if (this.length < 2) {

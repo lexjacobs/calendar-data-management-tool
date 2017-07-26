@@ -24,8 +24,6 @@ export const Logout = Backbone.View.extend({
   },
   el: 'li',
   render() {
-    console.log('checking authorization', this.model.get('authorized'));
-
     if (this.model.get('authorized')) {
       this.$el.html(`<a class="nav-link">Log out</a>`);
     } else {
