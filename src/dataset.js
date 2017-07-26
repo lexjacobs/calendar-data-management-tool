@@ -185,6 +185,7 @@ const variableEvents = [
     repeat: variable,
     previousSundown: 'yes',
     shading: full,
+    skipCount: 'yes'
   },
   {
     text: "Mid-Autumn Festival Asian",

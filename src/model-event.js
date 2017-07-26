@@ -38,7 +38,8 @@ export const EventModel = Backbone.Model.extend({
     mlh: 'no',
     asp: 'no',
     proclamation: 'no',
-    previousSundown: 'no'
+    previousSundown: 'no',
+    skipCount: 'no'
   },
   addNewTiming(date) {
     // method for adding string timings after initialization

@@ -27,7 +27,8 @@ Firebase.auth().onAuthStateChanged(function (user) {
     events.once('value', (snapshot) => {
       database.reset();
       database.add(snapshot.val());
-      router.navigate('#/events');
+      // router.navigate('#/events');
+      router.navigate('#/sort');
     });
 
   } else {

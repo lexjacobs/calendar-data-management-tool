@@ -121,6 +121,14 @@ const EditBlock = Backbone.View.extend({
         <option ${this.model.get('previousSundown') === 'yes' ? 'selected' : ''} value="yes">yes</option>
       </select>
     </label><br>
+
+    <label>school day count should be skipped:<br>
+      <select class="form-control" name="skipCount">
+        <option ${this.model.get('skipCount') === 'no' ? 'selected' : ''} value="no">no</option>
+        <option ${this.model.get('skipCount') === 'yes' ? 'selected' : ''} value="yes">yes</option>
+      </select>
+    </label><br>
+
     <br>
     <button type='submit' class="btn btn-primary btn-lg update-form">${variant === 'add' ? 'Add New Event' : 'Update Event'}</button>
 
@@ -198,9 +206,9 @@ const AddTimingBlock = Backbone.View.extend({
     this.$el.html('');
     this.$el.append('<form class="date-input-block"></form>');
 
-    let year = `<label>Year</label>  <input name="year" type="number" min="1000" max="9999" value=${moment().year()} />`;
-    let month = `&nbsp;&nbsp;<label>Month</label>  <input name="month" type="number" min="1" max="12" value="1" />`;
-    let day = `&nbsp;&nbsp;<label>Day</label><input name="day" type="number" min="1" max="31" value="1" />`;
+    let year = `<label>Year</label>  <input required name="year" type="number" min="1000" max="9999" value=${moment().year()} />`;
+    let month = `&nbsp;&nbsp;<label>Month</label>  <input required name="month" type="number" min="1" max="12" value="1" />`;
+    let day = `&nbsp;&nbsp;<label>Day</label><input required name="day" type="number" min="1" max="31" value="1" />`;
     let repeat = this.model.get('repeat');
 
     if (repeat === 'banner') {

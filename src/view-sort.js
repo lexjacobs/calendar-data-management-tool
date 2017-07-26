@@ -1,13 +1,10 @@
 import Backbone from 'backbone';
 import $ from 'jquery';
-import _ from 'underscore';
 import moment from 'moment';
 import dailyViews from './dailyViews';
 import database from './collection-database';
 import './css-sort.css';
-
-var START = moment().year() - 1;
-import { serializedAttributes } from './shared.js';
+import { serializedAttributes, serializedObject } from './shared.js';
 
 export const SortView = Backbone.View.extend({
   initialize() {
@@ -15,7 +12,7 @@ export const SortView = Backbone.View.extend({
     this.sortedViews = new SortedViews();
     this.render();
 
-    this.listenTo(this.datePicker, 'dateUpdated', this.redrawSortedViews);
+    this.listenTo(this.datePicker.model, 'change', this.redrawSortedViews);
 
     this.listenTo(database, 'updated', function () {
       this.redrawSortedViews();
@@ -27,30 +24,32 @@ export const SortView = Backbone.View.extend({
     return this;
   },
   generateDailyViews(start, end) {
+    if(!start) return null;
     return dailyViews(moment(start), moment(end));
   },
   redrawSortedViews() {
-    let start = this.datePicker.model.get('start');
-    let end = this.datePicker.model.get('end');
+    let start = this.datePicker.model.get('sortStart');
+    let end = this.datePicker.model.get('sortFinish');
     this.sortedViews.collection = this.generateDailyViews(start, end);
-    this.sortedViews.trigger('renderAgain');
+    this.sortedViews.render();
   }
 });
 
 const SortedViews = Backbone.View.extend({
   initialize() {
     this.render();
-    this.listenTo(this, 'renderAgain', this.render);
   },
   render() {
     this.$el.html('');
     this.collection && this.collection.models.forEach(x => {
 
+      console.log('date attributes', x.get('date').day(), x.get('events'));
+
       // on the first of the month, split out banner events and render first
       if (x.get('date').date() === 1) {
         let events = new Backbone.Collection(x.get('events'));
 
-        this.$el.append(`<div style="font-size:20px;">${x.get('date').format('MMMM')} heading:</div>`);
+        this.$el.append(`<div style="font-size:20px;">${x.get('date').format('MMMM')} ${x.get('date').format('YYYY')} heading:</div>`);
         this.$el.append(new ItemView({
           collection: new Backbone.Collection(events.where({
             repeat: 'banner'
@@ -76,11 +75,6 @@ const SortedViews = Backbone.View.extend({
         }).el);
       }
 
-      // log all events
-      // x.get('events').forEach(x => {
-      //   console.log(_.values(_.omit(x.attributes, ['occurrences', 'repeat', 'shading', 'mlh', 'asp'])));
-      // })
-
       return this;
     });
   }
@@ -88,39 +82,50 @@ const SortedViews = Backbone.View.extend({
 
 const DatePicker = Backbone.View.extend({
   initialize() {
-    this.model = new Backbone.Model({
-      start: `${START}-09-01`,
-      end: `${+START+1}-09-01`
-    });
+    this.start = moment().year();
+    this.model = new Backbone.Model();
     this.render();
   },
   events: {
-    'submit': 'setStartEnd',
+    'submit': 'setYearParameters',
   },
-  setStartEnd(e) {
+  setYearParameters(e) {
     e.preventDefault();
 
-    let values = $('.schoolYearChooser').serializeArray();
-    let start = serializedAttributes(values, 'start');
+    let values = serializedObject($('.schoolYearChooser').serializeArray());
+    console.log('captured values', values);
+    let start = values.start;
     this.model.set({
-      'start': `${start}-09-01`,
-      'end': `${+start+1}-09-01`
+      'sortStart': `${start}-09-01`,
+      'sortFinish': `${+start+1}-09-30`,
+      'schoolStartYear': start,
+      'schoolStartMonth': values.month,
+      'schoolStartDay': values.day,
+      'schoolDaysCount': values.count,
     });
-    this.trigger('dateUpdated');
+    console.log('model is now', this.model.attributes);
   },
-  template: _.template(
-    `<form>
-    <label>Choose the year to display, from September through the following September:</label>
-    <br>
-    <div class="col-md-2">
-    <input class="form-control num-year" placeholder="school calendar year" min="1" type="number" value=${START} /></input>
-    </div>
-    <button class='btn num-button' type='submit'>submit</button>
-    <br><br>
-    </form>`
-  ),
   render() {
-    this.$el.html(this.template());
+    this.$el.html(`<form class="schoolYearChooser">
+    <label>Choose the year to display, from September through the following September:<br>
+      <div class="col-md-4">
+        <input required name="start" placeholder="school calendar year" min="999" max="9999" type="number" value=${this.start} />
+      </div>
+    </label><br>
+
+    <label>Choose when to start counting school days:</label><br>
+
+    <label>Month</label>
+    <input required name="month" type="number" min="1" max="12" value="9" />
+    &nbsp;&nbsp;
+    <label>Day</label><input required name="day" type="number" min="1" max="31" value="1" /></label>
+    <br>
+    <label>Number of school days
+    <input required type="number" min="1" value="100" name="count"></label><br>
+
+    <button class='btn num-button' type='submit'>draw sorted list</button>
+    <br><br>
+    </form>`);
     return this;
   }
 });
