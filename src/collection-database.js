@@ -1,5 +1,9 @@
 import Backbone from 'backbone';
 
+// uncomment to repopulate firebase from data set
+// WARNING: DESTRUCTIVE OPERATION!
+// import dataset from './dataset';
+
 import eventModel from './model-event';
 import { Firebase } from './firebase';
 var events = Firebase.database().ref('events');
