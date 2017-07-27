@@ -119,6 +119,7 @@ const FilterChooser = Backbone.View.extend({
       filter: {}
     });
     this.render();
+    this.listenTo(this.model, 'change', this.render);
   },
   className: 'filter-chooser well',
   events: {
@@ -132,7 +133,6 @@ const FilterChooser = Backbone.View.extend({
     } else {
       this.model.set({'filter': {repeat: clickTarget}});
     }
-    this.render();
   },
   template: _.template(`Filter by:
   <span class="<% if(this.model.get('filter').repeat === 'annual')print('active') %>" data-repeat="annual">
