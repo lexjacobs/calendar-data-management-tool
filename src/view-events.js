@@ -34,8 +34,8 @@ export const EventsView = Backbone.View.extend({
       `);
     this.$el.append(this.filterChooser.el);
     this.$el.append(this.individualEventBlock.el);
-    this.$el.append(this.editModal.el);
-    this.$el.append(this.addModal.el);
+    this.$el.prepend(this.editModal.el);
+    this.$el.prepend(this.addModal.el);
     return this;
   },
   events: {

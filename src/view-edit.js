@@ -1,6 +1,7 @@
 import Backbone from 'backbone';
 import moment from 'moment';
 import $ from 'jquery';
+import './vendor/modal.js';
 import database from './collection-database';
 import './css-edit.css';
 import { serializedObject } from './shared';
@@ -24,18 +25,18 @@ const EditBlock = Backbone.View.extend({
   initialize(options) {
     this.options = options;
     this.render();
-    this.listenTo(this.model, 'change', this.renderClose);
   },
   events: {
     'submit .editBlock': 'handleSubmit',
     'change .selectRepeat': 'handleSelectRepeat'
   },
-  renderClose() {
-    this.$el.find('.closeModal').removeClass('hidden');
-  },
   handleSubmit(e) {
     e.preventDefault();
     this.composeEventUpdate();
+    this.closeModal();
+  },
+  closeModal() {
+    $('.modal').modal('hide');
   },
   handleSelectRepeat(e) {
     this.model.set('repeat', e.target.value, {silent: true});
@@ -129,8 +130,6 @@ const EditBlock = Backbone.View.extend({
 
     <br>
     <button type='submit' class="btn btn-primary btn-lg update-form">${variant === 'add' ? 'Add New Event' : 'Update Event'}</button>
-
-    <button data-dismiss="modal" type='button' class="hidden btn btn-success btn-lg closeModal">${variant === 'add' ? 'Add' : 'Update'} Successful. Click to close</button>
 
     </form>
     `);

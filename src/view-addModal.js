@@ -1,5 +1,4 @@
 import Backbone from 'backbone';
-import '../node_modules/bootstrap/js/modal.js';
 import { EditView } from './view-edit';
 import EventModel from './model-event';
 
