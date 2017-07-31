@@ -26,6 +26,7 @@ Firebase.auth().onAuthStateChanged(function (user) {
     var events = Firebase.database().ref('events');
     events.once('value', (snapshot) => {
       database.reset();
+      database.initialLoad = true;
       database.add(snapshot.val());
       router.navigate('#/events');
       // router.navigate('#/sort');

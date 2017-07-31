@@ -10,6 +10,7 @@ var events = Firebase.database().ref('events');
 
 const Database = Backbone.Collection.extend({
   initialize() {
+    this.initialLoad = false;
     this.listenTo(this, 'change', function (x) {
       this.answer('change', x);
     }, this);

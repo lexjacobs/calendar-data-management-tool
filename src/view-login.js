@@ -21,15 +21,15 @@ export const Login = Backbone.View.extend({
     let password = serializedAttributes(loginString, 'password');
 
     Firebase.auth().signInWithEmailAndPassword(email, password)
-    .then(function (success) {
-      return success;
-    })
-    .catch(function (error) {
-      console.error('auth error');
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      console.log(errorCode, errorMessage);
-    });
+      .then(function (success) {
+        return success;
+      })
+      .catch(function (error) {
+        console.error('auth error');
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
 
   },
   render() {

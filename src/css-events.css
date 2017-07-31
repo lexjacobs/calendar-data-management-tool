@@ -16,3 +16,8 @@
 .deleteButton {
   float: right;
 }
+
+.loading-spinner {
+  position: relative;
+  margin: 0 40%;
+}

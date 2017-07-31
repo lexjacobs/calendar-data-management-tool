@@ -166,7 +166,6 @@ const DatePicker = Backbone.View.extend({
     e.preventDefault();
 
     let values = serializedObject($('.schoolYearChooser').serializeArray());
-    console.log('captured values', values);
     let start = values.start;
     this.model.set({
       'sortStart': `${start}-09-01`,
@@ -176,7 +175,6 @@ const DatePicker = Backbone.View.extend({
       'schoolStartDay': values.day,
       'schoolDaysCount': values.count,
     });
-    console.log('model is now', this.model.attributes);
   },
   render() {
     this.$el.html(`<form class="schoolYearChooser">

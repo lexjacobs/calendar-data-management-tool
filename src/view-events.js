@@ -5,6 +5,7 @@ import './css-events.css';
 import database from './collection-database';
 import EditModal from './view-editModal';
 import AddModal from './view-addModal';
+import spinner from './view-spinner';
 
 export const EventsView = Backbone.View.extend({
   initialize() {
@@ -55,8 +56,14 @@ const IndividualEventBlock = Backbone.View.extend({
     this.listenTo(this.model, 'change', this.render);
     this.render();
   },
+  renderSpinner() {
+    if (!this.collection.initialLoad) {
+      this.$el.prepend(new spinner().el);
+    }
+  },
   render() {
     this.$el.html('');
+    this.renderSpinner();
     this.collection.where(this.model.get('filter')).forEach(function(x) {
       this.$el.append(new IndividualEvent({
         model: x,
@@ -141,7 +148,7 @@ const FilterChooser = Backbone.View.extend({
   Changing Events</span> |
   <span class="<% if(this.model.get('filter').repeat === 'banner')print('active') %>" data-repeat="banner">Month headings</span> |
   <span class="<% if(this.model.get('filter').repeat === undefined)print('active') %>" data-repeat="all">All Events</span>`
-),
+  ),
   render() {
     this.$el.html(this.template(this.model.attributes));
     return this;
