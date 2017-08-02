@@ -56,7 +56,7 @@ const SortedViews = Backbone.View.extend({
     return `<br>${model.get('date').format('MMM DD, YYYY ddd')} `;
   },
   addBannerHeading(model) {
-    return `<div style="font-size:20px;">${model.get('date').format('MMMM')} ${model.get('date').format('YYYY')} heading:</div>`;
+    return `<div style="font-size:20px;">${model.get('date').format('MMMM')} ${model.get('date').format('YYYY')} month box:</div>`;
   },
   countWeek() {
     if(this.WEEK_APPENDED_YET) return '';

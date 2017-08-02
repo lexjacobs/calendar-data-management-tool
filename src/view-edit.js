@@ -76,7 +76,7 @@ const EditBlock = Backbone.View.extend({
     <select ${variant === 'add' ? '' : 'disabled'} class="form-control selectRepeat" name="repeat">
     <option ${this.model.get('repeat') === 'annual' ? 'selected' : ''} value="annual">Same Date Annually</option>
     <option ${this.model.get('repeat') === 'variable' ? 'selected' : ''} value="variable">Date Changes Annually</option>
-    <option ${this.model.get('repeat') === 'banner' ? 'selected' : ''} value="banner">Calendar Month Heading Information</option>
+    <option ${this.model.get('repeat') === 'banner' ? 'selected' : ''} value="banner">Calendar Month Box</option>
     </select>
     </label><br>
 
