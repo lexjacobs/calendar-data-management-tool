@@ -61,6 +61,17 @@ const IndividualEventBlock = Backbone.View.extend({
       this.$el.prepend(new spinner().el);
     }
   },
+  addAddButton() {
+    // append additional add button at the bottom in the case of > 0 events
+    if(!this.collection.length) return;
+    this.$el.append(`
+      <br>
+      <!-- Button trigger modal -->
+      <button type="button" class="btn btn-primary btn-lg addEvent" data-toggle="modal" data-target="#addModal">
+      Add New Event
+      </button><br><br>
+      `);
+  },
   render() {
     this.$el.html('');
     this.renderSpinner();
@@ -70,6 +81,7 @@ const IndividualEventBlock = Backbone.View.extend({
         collection: this.collection
       }).el);
     }, this);
+    this.addAddButton();
     return this;
   }
 });
