@@ -26,13 +26,7 @@ export const EventsView = Backbone.View.extend({
   },
   render() {
     this.$el.html('');
-    this.$el.append(`
-      <br>
-      <!-- Button trigger modal -->
-      <button type="button" class="btn btn-primary btn-lg addEvent" data-toggle="modal" data-target="#addModal">
-      Add New Event
-      </button>
-      `);
+    this.$el.append(addNewEventButton());
     this.$el.append(this.filterChooser.el);
     this.$el.append(this.individualEventBlock.el);
     this.$el.prepend(this.editModal.el);
@@ -56,21 +50,27 @@ const IndividualEventBlock = Backbone.View.extend({
     this.listenTo(this.model, 'change', this.render);
     this.render();
   },
+  events: {
+    'click .back-to-top': 'backToTop'
+  },
+  backToTop() {
+    $(window).scrollTop(0);
+  },
   renderSpinner() {
     if (!this.collection.initialLoad) {
       this.$el.prepend(new spinner().el);
     }
   },
+  backToTopButton() {
+    return `
+    <button class="btn btn-primary back-to-top"><i class="glyphicon glyphicon-arrow-up"></i> Back to Top</button><br><br>
+    `;
+  },
   addAddButton() {
     // append additional add button at the bottom in the case of > 0 events
     if(!this.collection.length) return;
-    this.$el.append(`
-      <br>
-      <!-- Button trigger modal -->
-      <button type="button" class="btn btn-primary btn-lg addEvent" data-toggle="modal" data-target="#addModal">
-      Add New Event
-      </button><br><br>
-      `);
+    this.$el.append(addNewEventButton());
+    this.$el.append(this.backToTopButton());
   },
   render() {
     this.$el.html('');
@@ -166,3 +166,13 @@ const FilterChooser = Backbone.View.extend({
     return this;
   }
 });
+
+function addNewEventButton() {
+  return `
+    <br>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary btn-lg addEvent" data-toggle="modal" data-target="#addModal">
+    Add New Event
+    </button>
+    `;
+}
