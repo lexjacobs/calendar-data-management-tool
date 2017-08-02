@@ -15,6 +15,9 @@ const logout = new Logout({
   el: '#logout-container'
 });
 
+var events = Firebase.database().ref('events');
+var lastUpdate = Firebase.database().ref('lastUpdate');
+
 Firebase.auth().onAuthStateChanged(function (user) {
 
   if (user) {
@@ -23,8 +26,14 @@ Firebase.auth().onAuthStateChanged(function (user) {
       authorized: true
     });
 
-    var events = Firebase.database().ref('events');
+
     events.once('value', (snapshot) => {
+
+      // set integrity signature to avoid database overwrites
+      let timeNow = Date.now();
+      lastUpdate.set(timeNow);
+      sessionStorage.setItem('lastUpdate', timeNow);
+
       database.reset();
       database.initialLoad = true;
       database.add(snapshot.val());

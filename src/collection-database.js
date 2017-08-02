@@ -7,6 +7,7 @@ import Backbone from 'backbone';
 import eventModel from './model-event';
 import { Firebase } from './firebase';
 var events = Firebase.database().ref('events');
+var lastUpdate = Firebase.database().ref('lastUpdate');
 
 const Database = Backbone.Collection.extend({
   initialize() {
@@ -19,9 +20,24 @@ const Database = Backbone.Collection.extend({
     }, this);
 
   },
+  integrityCheck() {
+    return lastUpdate.once('value');
+  },
   updateFirebase() {
-    events.set(this.toJSON());
-    this.trigger('updated');
+
+    this.integrityCheck()
+      .then(x => {
+        if (+x.val() === +sessionStorage.getItem('lastUpdate')) {
+          events.set(this.toJSON());
+          this.trigger('updated');
+        } else {
+          alert('Not applying most recent update because it would overwrite previous changes. (Perhaps an event was created or updated in a different tab/window?). Refresh browser to fix');
+          return;
+        }
+      })
+      .catch(e => {
+        console.log('in integrity check error', e);
+      });
   },
   answer() {
     // avoid deleting database in case of race condition where client
