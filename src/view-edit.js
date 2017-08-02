@@ -33,7 +33,6 @@ const EditBlock = Backbone.View.extend({
   handleSubmit(e) {
     e.preventDefault();
     this.composeEventUpdate();
-    this.closeModal();
   },
   closeModal() {
     $('.modal').modal('hide');
@@ -44,17 +43,29 @@ const EditBlock = Backbone.View.extend({
     this.model.mapTimingFromAttributeToCollection();
     this.renderTimingBlocks();
   },
+  checkForAnyDates(arr) {
+    return arr.length > 0;
+  },
   composeEventUpdate() {
     let timingResult = [];
     $('.timingPill').each((x, y) => timingResult.push($(y).text()));
 
     let formResult = serializedObject(this.$el.find('.editBlock').serializeArray());
+
+    // if attempting to submit/edit without at least 1 date
+    if(!this.checkForAnyDates(timingResult)) {
+      $('#editModal').scrollTop(0);
+      $('#addModal').scrollTop(0);
+      $('.add-new-date-label').addClass('background-red');
+      return;
+    }
     formResult.timing = timingResult;
     this.model.set(formResult);
     this.model.mapTimingFromAttributeToCollection();
 
     // add a new event model to database, will ignore existing model
     database.add(this.model);
+    this.closeModal();
   },
   renderTimingBlocks() {
     this.$el.find('.timing-block-container').html(new TimingBlockContainer({
@@ -80,7 +91,7 @@ const EditBlock = Backbone.View.extend({
     </select>
     </label><br>
 
-    <label>Add New Date:<br>
+    <label class="add-new-date-label">Add New Date:<br>
     <div class="timing-block-container"></div><br>
     </label><br>
 
@@ -167,6 +178,7 @@ const TimingBlockContainer = Backbone.View.extend({
     }).join('-');
     this.model.addNewTiming(dateString);
     this.renderTimingPills();
+    $('.add-new-date-label').removeClass('background-red');
   },
   tagName: 'span',
   renderTimingPills() {
