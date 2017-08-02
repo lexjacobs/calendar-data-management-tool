@@ -37,8 +37,6 @@ Firebase.auth().onAuthStateChanged(function (user) {
       database.reset();
       database.initialLoad = true;
       database.add(snapshot.val());
-      router.navigate('#/events');
-      // router.navigate('#/sort');
     });
 
   } else {

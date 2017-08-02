@@ -38,12 +38,15 @@ const ApplicationRouter = Backbone.Router.extend({
     $('#root').html(ViewManager.showView(SortView));
     $('ul.nav-pills > li').removeClass('active');
     $('ul.nav-pills > li.nav-item.sort').addClass('active');
+    this.navigate("#/sort", {trigger: false, replace: true});
   },
 
   events() {
     $('#root').html(ViewManager.showView(EventsView));
     $('ul.nav-pills > li').removeClass('active');
     $('ul.nav-pills > li.nav-item.events').addClass('active');
+    this.navigate("#/events", {trigger: false, replace: true});
+
   }
 
 });

@@ -4,6 +4,7 @@ import { Firebase } from './firebase';
 import founder from './assets/founder.png';
 import './css-login.css';
 import { serializedAttributes } from './shared';
+import { router } from './index';
 
 export const Login = Backbone.View.extend({
   initialize() {
@@ -22,6 +23,8 @@ export const Login = Backbone.View.extend({
 
     Firebase.auth().signInWithEmailAndPassword(email, password)
       .then(function (success) {
+        console.log('login successful');
+        router.navigate('#/');
         return success;
       })
       .catch(function (error) {
