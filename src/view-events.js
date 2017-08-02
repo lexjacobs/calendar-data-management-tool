@@ -75,7 +75,7 @@ const IndividualEventBlock = Backbone.View.extend({
   render() {
     this.$el.html('');
     this.renderSpinner();
-    this.collection.where(this.model.get('filter')).forEach(function(x) {
+    this.collection.where(this.model.get('filter')).reverse().forEach(function(x) {
       this.$el.append(new IndividualEvent({
         model: x,
         collection: this.collection
@@ -155,10 +155,10 @@ const FilterChooser = Backbone.View.extend({
   },
   template: _.template(`Filter by:
   <span class="<% if(this.model.get('filter').repeat === 'annual')print('active') %>" data-repeat="annual">
-  Annual events</span> |
+  Annual Events</span> |
   <span class="<% if(this.model.get('filter').repeat === 'variable')print('active') %>" data-repeat="variable">
   Changing Events</span> |
-  <span class="<% if(this.model.get('filter').repeat === 'banner')print('active') %>" data-repeat="banner">Month headings</span> |
+  <span class="<% if(this.model.get('filter').repeat === 'banner')print('active') %>" data-repeat="banner">Month Boxes</span> |
   <span class="<% if(this.model.get('filter').repeat === undefined)print('active') %>" data-repeat="all">All Events</span>`
   ),
   render() {
