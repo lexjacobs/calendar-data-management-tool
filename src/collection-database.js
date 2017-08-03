@@ -7,31 +7,27 @@ import Backbone from 'backbone';
 import eventModel from './model-event';
 import { Firebase } from './firebase';
 var events = Firebase.database().ref('events');
-var lastUpdate = Firebase.database().ref('lastUpdate');
+var version = Firebase.database().ref('version');
 
 const Database = Backbone.Collection.extend({
   initialize() {
     this.initialLoad = false;
-    this.listenTo(this, 'change', function (x) {
-      this.answer('change', x);
-    }, this);
     this.listenTo(this, 'update', function (x) {
       this.answer('update', x);
     }, this);
-
   },
   integrityCheck() {
-    return lastUpdate.once('value');
+    return version.once('value');
   },
   updateFirebase() {
 
     this.integrityCheck()
       .then(x => {
-        if (+x.val() === +sessionStorage.getItem('lastUpdate')) {
+        if (+x.val() === +sessionStorage.getItem('currentVersion')) {
           events.set(this.toJSON());
           this.trigger('updated');
         } else {
-          alert('Not applying most recent update because it would overwrite previous changes. (Perhaps an event was created or updated in a different tab/window?). Refresh browser to fix');
+          alert('Not applying most recent update because you are not using the most recent version of the software. Refresh browser to fix.');
           return;
         }
       })

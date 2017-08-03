@@ -65,6 +65,7 @@ const EditBlock = Backbone.View.extend({
 
     // add a new event model to database, will ignore existing model
     database.add(this.model);
+    database.trigger('update');
     this.closeModal();
   },
   renderTimingBlocks() {

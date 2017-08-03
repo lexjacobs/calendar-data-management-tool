@@ -16,7 +16,7 @@ const logout = new Logout({
 });
 
 var events = Firebase.database().ref('events');
-var lastUpdate = Firebase.database().ref('lastUpdate');
+var version = Firebase.database().ref('version');
 
 Firebase.auth().onAuthStateChanged(function (user) {
 
@@ -26,17 +26,16 @@ Firebase.auth().onAuthStateChanged(function (user) {
       authorized: true
     });
 
+    events.on('value', (snapshot) => {
+      
+      // set integrity signature to ensure most recent version of software
+      version.once('value').then(x => {
+        sessionStorage.setItem('currentVersion', x.val());
+        database.initialLoad = true;
+        database.reset(snapshot.val());
+        database.trigger('update');
+      });
 
-    events.once('value', (snapshot) => {
-
-      // set integrity signature to avoid database overwrites
-      let timeNow = Date.now();
-      lastUpdate.set(timeNow);
-      sessionStorage.setItem('lastUpdate', timeNow);
-
-      database.reset();
-      database.initialLoad = true;
-      database.add(snapshot.val());
     });
 
   } else {
@@ -48,7 +47,6 @@ Firebase.auth().onAuthStateChanged(function (user) {
     router.navigate('#/login');
   }
 });
-
 
 router.on('route', function(){
   if (!LOGGED_IN) {
