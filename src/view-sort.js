@@ -7,6 +7,8 @@ import database from './collection-database';
 import './css-sort.css';
 import ordinal from 'ordinal';
 import { serializedObject } from './shared.js';
+import calendarEdit from './assets/svg/calendar-edit.svg';
+import repeat from './assets/svg/repeat.svg';
 
 export const SortView = Backbone.View.extend({
   initialize() {
@@ -250,6 +252,14 @@ const IndividualItem = Backbone.View.extend({
   className: 'individual-sorted-item',
   render() {
     this.$el.append(`${this.model.get('text')}`);
+
+    if (this.model.get('repeat') === 'annual') {
+      this.$el.prepend(`<img class='individual-item-svg' src=${repeat}>`);
+    }
+    if (this.model.get('repeat') === 'variable') {
+      this.$el.prepend(`<span class="badge individual-item-badge">1</span>`);
+    }
+
     return this;
   }
 });
