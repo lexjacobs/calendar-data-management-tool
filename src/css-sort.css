@@ -11,24 +11,23 @@
 }
 
 .individual-sorted-item::before {
-  content: '-';
+  /*content: '-';*/
 }
 
 .individual-item-svg {
-  width: 15px;
+  width: 21px;
   height: auto;
-  margin: 0 5px 2px;
+  margin: 0 15px 2px 3px;
 }
 
 .individual-item-badge {
-  margin: 0 5px 2px;
+  margin: 0 15px 2px 3px;
 }
 
 .asp::after {
   display: inline;
   content: 'ASP: OFF';
   padding: 0 3px;
-  margin-right: 4px;
   border: 2px solid black;
 }
 
@@ -36,13 +35,12 @@
   display: inline;
   content: 'MLH: ON';
   padding: 0 3px;
-  margin-right: 4px;
   border: 2px solid black;
 }
 
 .shading-box {
   border: 2px solid black;
-  padding: 0 3px;
+  padding: 0 5px;
 }
 
 .previous-sundown {
