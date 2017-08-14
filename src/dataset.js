@@ -210,7 +210,12 @@ const variableEvents = [
   },
 ];
 
-const dataset = [].concat(bannerEvents).concat(annualEvents).concat(variableEvents);
+const dataset = [].concat(bannerEvents).concat(annualEvents).concat(variableEvents).map(x => {
+
+  // make it clear if database gets hydrated from dataset
+  x.text = `TEST ${x.text}`;
+  return x;
+});
 
 var events = Firebase.database().ref('events');
 events.set(dataset);

@@ -167,7 +167,7 @@ const FilterChooser = Backbone.View.extend({
   }
 });
 
-function addNewEventButton() {
+export function addNewEventButton() {
   return `
     <br>
     <!-- Button trigger modal -->

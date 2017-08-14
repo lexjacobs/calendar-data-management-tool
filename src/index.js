@@ -27,7 +27,7 @@ Firebase.auth().onAuthStateChanged(function (user) {
     });
 
     events.on('value', (snapshot) => {
-      
+
       // set integrity signature to ensure most recent version of software
       version.once('value').then(x => {
         sessionStorage.setItem('currentVersion', x.val());

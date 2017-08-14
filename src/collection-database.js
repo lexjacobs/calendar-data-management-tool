@@ -9,7 +9,7 @@ import { Firebase } from './firebase';
 var events = Firebase.database().ref('events');
 var version = Firebase.database().ref('version');
 
-const Database = Backbone.Collection.extend({
+export const Database = Backbone.Collection.extend({
   initialize() {
     this.initialLoad = false;
     this.listenTo(this, 'update', function (x) {
@@ -39,8 +39,8 @@ const Database = Backbone.Collection.extend({
     // avoid deleting database in case of race condition where client
     // adds to collection prior to db hydrating from firebase
     if (this.length < 2) {
-      if (window.confirm('Confirm delete - this will leave the database with 2 or less items.')) {
-        console.log('as instructed, db will be <= 2 items now.');
+      if (window.confirm('Confirm delete - this will leave the database with 1 or less items.')) {
+        console.log('as instructed, db will be <= 1 items now.');
         this.updateFirebase();
       } else {
         console.log('avoided db overwrite disaster!');
