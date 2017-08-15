@@ -154,7 +154,7 @@ const SortedViews = Backbone.View.extend({
   }
 });
 
-const DatePicker = Backbone.View.extend({
+export const DatePicker = Backbone.View.extend({
   initialize() {
     this.start = moment().year();
     this.model = new Backbone.Model();

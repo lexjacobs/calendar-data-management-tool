@@ -2,6 +2,7 @@ import $ from 'jquery';
 import Backbone from 'backbone';
 import { SortView } from './view-sort';
 import { EventsView } from './view-events';
+import { AlternateView } from './view-alternate';
 import { Login } from './view-login';
 
 var ViewManager = {
@@ -24,6 +25,7 @@ const ApplicationRouter = Backbone.Router.extend({
     "events": "events",
     "login": "login",
     "sort": "sort",
+    "alternate": "alternate",
     "*default": "events"
   },
 
@@ -46,7 +48,13 @@ const ApplicationRouter = Backbone.Router.extend({
     $('ul.nav-pills > li').removeClass('active');
     $('ul.nav-pills > li.nav-item.events').addClass('active');
     this.navigate("#/events", {trigger: false, replace: true});
+  },
 
+  alternate() {
+    $('#root').html(ViewManager.showView(AlternateView));
+    $('ul.nav-pills > li').removeClass('active');
+    $('ul.nav-pills > li.nav-item.alternate').addClass('active');
+    this.navigate("#/alternate", {trigger: false, replace: true});
   }
 
 });
