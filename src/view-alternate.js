@@ -26,37 +26,6 @@ export const AlternateView = SortView.extend({
   },
 });
 
-// export const AlternateView = Backbone.View.extend({
-//   initialize() {
-//     this.datePicker = new DatePicker();
-//     this.sortedViews = new SortedViews({
-//       model: this.datePicker.model
-//     });
-//     this.render();
-//
-//     this.listenTo(this.datePicker.model, 'change', this.redrawSortedViews);
-//
-//     this.listenTo(database, 'updated', function () {
-//       this.redrawSortedViews();
-//     }, this);
-//   },
-//   render() {
-//     this.$el.append(this.datePicker.el);
-//     this.$el.append(this.sortedViews.el);
-//     return this;
-//   },
-//   generateDailyViews(start, end) {
-//     if(!start) return null;
-//     return dailyViews(moment(start), moment(end));
-//   },
-//   redrawSortedViews() {
-//     let start = this.datePicker.model.get('sortStart');
-//     let end = this.datePicker.model.get('sortFinish');
-//     this.sortedViews.collection = this.generateDailyViews(start, end);
-//     this.sortedViews.render();
-//   }
-// });
-
 const SortedViews = Backbone.View.extend({
   initialize() {
     this.resetCounterVariables();
@@ -74,9 +43,6 @@ const SortedViews = Backbone.View.extend({
   addEventDate(model) {
     return `<br><br>${++this.EVENT_COUNT_GLOBAL}|A|1|${model.get('date').format('MM/DD/YYYY')}|`;
   },
-  // addBannerHeading(model) {
-  //   return `<div style="font-size:20px;">${model.get('date').format('MMMM')} ${model.get('date').format('YYYY')} month box:</div>`;
-  // },
   countWeek() {
     if(this.WEEK_APPENDED_YET) return '';
     this.WEEK_APPENDED_YET = true;
@@ -148,8 +114,11 @@ const SortedViews = Backbone.View.extend({
       }
 
       // render events
+      // **NOT INCLUDING BANNER EVENTS**
+      let events = _.reject(x.get('events'), (x) => x.get('repeat')==='banner');
+
       this.$el.append(new ItemView({
-        collection: new Backbone.Collection(x.get('events'))
+        collection: new Backbone.Collection(events)
       }).el);
 
       return this;
@@ -157,69 +126,13 @@ const SortedViews = Backbone.View.extend({
   }
 });
 
-// const DatePicker = Backbone.View.extend({
-//   initialize() {
-//     this.start = moment().year();
-//     this.model = new Backbone.Model();
-//     this.render();
-//   },
-//   events: {
-//     'submit': 'setYearParameters',
-//   },
-//   setYearParameters(e) {
-//     e.preventDefault();
-//
-//     let values = serializedObject($('.schoolYearChooser').serializeArray());
-//     let start = values.start;
-//     this.model.set({
-//       'sortStart': `${start}-09-01`,
-//       'sortFinish': `${+start+1}-09-30`,
-//       'schoolStartYear': start,
-//       'schoolStartMonth': values.month,
-//       'schoolStartDay': values.day,
-//       'schoolDaysCount': values.count,
-//     });
-//   },
-//   render() {
-//     this.$el.html(`<form class="schoolYearChooser">
-//     <label>Choose the year to display, from September through the following September:<br>
-//       <div class="col-md-4">
-//         <input required name="start" placeholder="school calendar year" min="999" max="9999" type="number" value=${this.start} />
-//       </div>
-//     </label><br>
-//
-//     <label>Choose when to start counting school days:</label><br>
-//
-//     <label>Month</label>
-//     <input required name="month" type="number" min="1" max="12" value="9" />
-//     &nbsp;&nbsp;
-//     <label>Day</label><input required name="day" type="number" min="1" max="31" value="" /></label>
-//     <br>
-//     <label>Number of school days
-//     <input required type="number" min="1" value="" name="count"></label><br>
-//
-//     <button class='btn num-button' type='submit'>draw sorted list</button>
-//     <br><br>
-//     </form>`);
-//     return this;
-//   }
-// });
-
 const ItemView = Backbone.View.extend({
   initialize() {
-
-    // this.$el.prepend(`<span class="hidden shading-box">shading: </span>`);
 
     // check for any instance of shading
     if (this.checkFor('asp', 'yes')) this.$el.append(`ASP Off^`);
 
     if (this.checkFor('mlh', 'yes')) this.$el.append(`MLH Rules On^`);
-
-    // if (this.checkFor('shading', 'full')) this.$el.find('.shading-box').removeClass('hidden').append('full ');
-    //
-    // if (this.checkFor('shading', 'diagonal')) this.$el.find('.shading-box').removeClass('hidden').append('diagonal ');
-    //
-    // if (this.checkFor('shading', 'bars')) this.$el.find('.shading-box').removeClass('hidden').append('bars ');
 
     this.render();
   },
@@ -262,16 +175,6 @@ const IndividualItem = Backbone.View.extend({
   // className: 'individual-sorted-item',
   render() {
     this.$el.append(`${this.model.get('text')}`);
-
-    // add icon for repeating event
-    // if (this.model.get('repeat') === 'annual') {
-    //   this.$el.prepend(`<img class='individual-item-svg' src=${repeat}>`);
-    // }
-
-    // add icon for individual event
-    // if (this.model.get('repeat') === 'variable') {
-    //   this.$el.prepend(`<span class="badge individual-item-badge">1</span>`);
-    // }
 
     return this;
   }
