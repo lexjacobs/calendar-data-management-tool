@@ -1,5 +1,6 @@
 import Backbone from 'backbone';
 import moment from 'moment';
+import {Firebase} from './firebase';
 import $ from 'jquery';
 import './vendor/modal.js';
 import database from './collection-database';
@@ -75,6 +76,10 @@ const EditBlock = Backbone.View.extend({
 
   },
   render() {
+
+    // good enough for the scope of our project, given only 2 users
+    let superuser = Firebase.auth().currentUser.email.includes('x.j');
+
     let variant = this.options.variant;
     this.$el.html('');
     this.$el.append(`
@@ -84,8 +89,10 @@ const EditBlock = Backbone.View.extend({
       <textarea required placeholder="Enter event text here" class="event-text" name="text" rows="3" cols="70" type="text-box">${this.model.get('text')}</textarea>
     </label><br>
 
-    <label>repeat pattern: ${variant === 'add' ? '' : '(delete event and re-create to change)'}<br>
-    <select ${variant === 'add' ? '' : 'disabled'} class="form-control selectRepeat" name="repeat">
+    ${/* NB: changing the repeat pattern will clear out the event array, so a date must be replaced before closing the modal, either by submitting, or by clicking with the close icon */''}
+    
+    <label>repeat pattern: ${superuser ? '(enabled for superuser. beware changing this without updating!)' : variant === 'add' ? '' : '(delete event and re-create to change)'}<br>
+    <select ${(variant === 'add' || superuser) ? '' : 'disabled'} class="form-control selectRepeat" name="repeat">
     <option ${this.model.get('repeat') === 'annual' ? 'selected' : ''} value="annual">Same Date Annually</option>
     <option ${this.model.get('repeat') === 'variable' ? 'selected' : ''} value="variable">Date Changes Annually</option>
     <option ${this.model.get('repeat') === 'banner' ? 'selected' : ''} value="banner">Calendar Month Box</option>
