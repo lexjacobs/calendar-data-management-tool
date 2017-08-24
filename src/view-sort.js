@@ -131,7 +131,8 @@ const SortedViews = Backbone.View.extend({
         this.$el.append(new ItemView({
           collection: new Backbone.Collection(events.reject({
             repeat: 'banner'
-          }))
+          })),
+          thisDate: x.get('date')
         }).el);
 
         // on other days just render the events of that day
@@ -145,7 +146,8 @@ const SortedViews = Backbone.View.extend({
 
         // render events
         this.$el.append(new ItemView({
-          collection: new Backbone.Collection(x.get('events'))
+          collection: new Backbone.Collection(x.get('events')),
+          thisDate: x.get('date')
         }).el);
       }
 
@@ -203,20 +205,22 @@ export const DatePicker = Backbone.View.extend({
 });
 
 const ItemView = Backbone.View.extend({
-  initialize() {
+  initialize(options) {
 
     this.$el.prepend(`<span class="hidden shading-box">shading: </span>`);
 
-    // check for any instance of shading
     if (this.checkFor('asp', 'yes')) this.$el.append(`<div class="asp"></div>`);
 
     if (this.checkFor('mlh', 'yes')) this.$el.append(`<div class="mlh"></div>`);
 
-    if (this.checkFor('shading', 'full')) this.$el.find('.shading-box').removeClass('hidden').append('full ');
+    // check for any instance of shading, but not on weekends
+    if (options.thisDate && options.thisDate.day() > 0 && options.thisDate.day() < 6) {
+      if (this.checkFor('shading', 'full')) this.$el.find('.shading-box').removeClass('hidden').append('full ');
 
-    if (this.checkFor('shading', 'diagonal')) this.$el.find('.shading-box').removeClass('hidden').append('diagonal ');
+      if (this.checkFor('shading', 'diagonal')) this.$el.find('.shading-box').removeClass('hidden').append('diagonal ');
 
-    if (this.checkFor('shading', 'bars')) this.$el.find('.shading-box').removeClass('hidden').append('bars ');
+      if (this.checkFor('shading', 'bars')) this.$el.find('.shading-box').removeClass('hidden').append('bars ');
+    }
 
     this.render();
   },
