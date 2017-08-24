@@ -72,10 +72,20 @@ const IndividualEventBlock = Backbone.View.extend({
     this.$el.append(addNewEventButton());
     this.$el.append(this.backToTopButton());
   },
+  filterCollection(collection) {
+
+    // special case for shading
+    if (this.model.get('filter').shading === 'yes') {
+      return collection.where({shading: 'full'}).concat(collection.where({shading: 'bars'}).concat(collection.where({shading: 'diagonal'})));
+    }
+
+    return collection.where(this.model.get('filter'));
+  },
   render() {
     this.$el.html('');
     this.renderSpinner();
-    this.collection.where(this.model.get('filter')).reverse().forEach(function(x) {
+
+    this.filterCollection(this.collection).reverse().forEach(function(x) {
       this.$el.append(new IndividualEvent({
         model: x,
         collection: this.collection
@@ -145,21 +155,48 @@ const FilterChooser = Backbone.View.extend({
     click: 'clickHandler'
   },
   clickHandler(e) {
-    let clickTarget = $(e.target).data('repeat');
+    let clickTarget = $(e.target).data('filter');
     if (clickTarget === undefined) return null;
     if (clickTarget === 'all') {
       this.model.set({'filter': {}});
+    } else if (clickTarget === 'skipCount') {
+      this.model.set({'filter': {skipCount: 'yes'}});
+    } else if (clickTarget === 'asp') {
+      this.model.set({'filter': {asp: 'yes'}});
+    } else if (clickTarget === 'mlh') {
+      this.model.set({'filter': {mlh: 'yes'}});
+    } else if (clickTarget === 'previousSundown') {
+      this.model.set({'filter': {previousSundown: 'yes'}});
+    } else if (clickTarget === 'proclamation') {
+      this.model.set({'filter': {proclamation: 'yes'}});
+    } else if (clickTarget === 'shading') {
+      this.model.set({'filter': {shading: 'yes'}});
     } else {
       this.model.set({'filter': {repeat: clickTarget}});
     }
   },
   template: _.template(`Filter by:
-  <span class="<% if(this.model.get('filter').repeat === 'annual')print('active') %>" data-repeat="annual">
-  Annual Events</span> |
-  <span class="<% if(this.model.get('filter').repeat === 'variable')print('active') %>" data-repeat="variable">
-  Changing Events</span> |
-  <span class="<% if(this.model.get('filter').repeat === 'banner')print('active') %>" data-repeat="banner">Month Boxes</span> |
-  <span class="<% if(this.model.get('filter').repeat === undefined)print('active') %>" data-repeat="all">All Events</span>`
+  <span class="<% if(this.model.get('filter').repeat === 'annual')print('active') %>" data-filter="annual">
+  Annual</span> |
+
+  <span class="<% if(this.model.get('filter').repeat === 'variable')print('active') %>" data-filter="variable">
+  Changing</span> |
+
+  <span class="<% if(this.model.get('filter').repeat === 'banner')print('active') %>" data-filter="banner">Month</span> |
+
+  <span class="<% if(this.model.get('filter').shading === 'yes')print('active') %>" data-filter="shading">Shading</span> |
+
+  <span class="<% if(this.model.get('filter').mlh === 'yes')print('active') %>" data-filter="mlh">MLH</span> |
+
+  <span class="<% if(this.model.get('filter').asp === 'yes')print('active') %>" data-filter="asp">ASP</span> |
+
+  <span class="<% if(this.model.get('filter').proclamation === 'yes')print('active') %>" data-filter="proclamation">Proclamation</span> |
+
+  <span class="<% if(this.model.get('filter').previousSundown === 'yes')print('active') %>" data-filter="previousSundown">Sundown</span> |
+
+  <span class="<% if(this.model.get('filter').skipCount === 'yes')print('active') %>" data-filter="skipCount">Skip Count</span> |
+
+  <span class="<% if(Object.keys(this.model.get('filter')).length === 0)print('active') %>" data-filter="all">All Events</span>`
   ),
   render() {
     this.$el.html(this.template(this.model.attributes));
