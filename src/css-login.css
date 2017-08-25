@@ -2,17 +2,9 @@
   width: 166%;
 }
 
-.align {
-  display: flex;
-  justify-content: center;
-}
-.align-item {
-  align-self: center;
-}
-
 .center-container {
   position: relative;
-  width: 20%;
+  width: 80%;
   margin: 26px auto;
   background-color: lightblue;
 }
@@ -28,13 +20,14 @@
 .inner-upper {
   position: relative;
   margin: 41px 79px 0px 9px;
-}
-
-.inner-upper {
   font-weight: bold;
 }
 
 .inner-lower {
   position: relative;
   margin: 50px 81px 38px 9px;
+}
+
+.inner-lower img {
+  width: 100%;
 }
