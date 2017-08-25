@@ -31,8 +31,12 @@ Firebase.auth().onAuthStateChanged(function (user) {
       // set integrity signature to ensure most recent version of software
       version.once('value').then(x => {
         sessionStorage.setItem('currentVersion', x.val());
+
+        // and hydrate database from firebase
         database.initialLoad = true;
         database.reset(snapshot.val());
+
+        // 'update' is being listenTo'd by views that will then re-render
         database.trigger('update');
       });
 
@@ -40,6 +44,8 @@ Firebase.auth().onAuthStateChanged(function (user) {
 
   } else {
     LOGGED_IN = false;
+
+    // clear client database (does not affect firebase)
     database.reset();
     logout.model.set({
       authorized: false
@@ -48,6 +54,7 @@ Firebase.auth().onAuthStateChanged(function (user) {
   }
 });
 
+// don't allow loading of other views without first logging in
 router.on('route', function(){
   if (!LOGGED_IN) {
     this.navigate('#/login');

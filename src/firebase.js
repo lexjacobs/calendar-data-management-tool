@@ -1,7 +1,6 @@
 import firebase from 'firebase';
 
 // REACT_APP needed by convention for inclusion in client code
-
 var config = {
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTHORIZED_DOMAIN,

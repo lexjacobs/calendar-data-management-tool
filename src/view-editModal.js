@@ -8,6 +8,8 @@ const EditModal = Backbone.View.extend({
   },
   updateEditView(model) {
     this.$el.find('.modal-body').html('');
+
+    // populate EditView with passed-in model for editing
     this.$el.find('.modal-body').append(new EditView({
       model
     }).el);

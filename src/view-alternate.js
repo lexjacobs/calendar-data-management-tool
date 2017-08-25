@@ -1,13 +1,9 @@
 import Backbone from 'backbone';
-// import $ from 'jquery';
 import _ from 'underscore';
 import moment from 'moment';
-// import dailyViews from './dailyViews';
 import database from './collection-database';
 import './css-alternate.css';
 import ordinal from 'ordinal';
-// import { serializedObject } from './shared.js';
-// import repeat from './assets/svg/repeat.svg';
 import { SortView, DatePicker } from './view-sort';
 
 export const AlternateView = SortView.extend({

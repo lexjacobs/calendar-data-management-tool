@@ -2,6 +2,8 @@ import Backbone from 'backbone';
 import database from './collection-database';
 import _ from 'underscore';
 
+// convenience developer view for rendering all events to the page
+// at unlinked url: /allEvents
 const AllEvents = Backbone.View.extend({
   initialize() {
     this.render();

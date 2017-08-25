@@ -11,9 +11,11 @@ var version = Firebase.database().ref('version');
 
 export const Database = Backbone.Collection.extend({
   initialize() {
+
+    // will be set to true in index.js, after database is hydrated
     this.initialLoad = false;
-    this.listenTo(this, 'update', function (x) {
-      this.answer('update', x);
+    this.listenTo(this, 'update', function() {
+      this.avoidDatabaseDestruction();
     }, this);
   },
   integrityCheck() {
@@ -21,6 +23,9 @@ export const Database = Backbone.Collection.extend({
   },
   updateFirebase() {
 
+    // allows developer to make significant changes to software
+    // and increment 'version' key directly in firebase, preventing
+    // database writes without client refresh for latest code
     this.integrityCheck()
       .then(x => {
         if (+x.val() === +sessionStorage.getItem('currentVersion')) {
@@ -35,7 +40,8 @@ export const Database = Backbone.Collection.extend({
         console.log('in integrity check error', e);
       });
   },
-  answer() {
+  avoidDatabaseDestruction() {
+
     // avoid deleting database in case of race condition where client
     // adds to collection prior to db hydrating from firebase
     if (this.length < 2) {

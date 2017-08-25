@@ -38,6 +38,7 @@ const ApplicationRouter = Backbone.Router.extend({
     $('ul.nav-pills > li.nav-item.login').addClass('active');
   },
 
+  // only for development purposes, not given a direct link
   allEvents() {
     $('#root').html(ViewManager.showView(AllEvents));
     $('ul.nav-pills > li').removeClass('active');

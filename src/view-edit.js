@@ -89,8 +89,8 @@ const EditBlock = Backbone.View.extend({
       <textarea required placeholder="Enter event text here" class="event-text" name="text" rows="3" cols="70" type="text-box">${this.model.get('text')}</textarea>
     </label><br>
 
-    ${/* NB: changing the repeat pattern will clear out the event array, so a date must be replaced before closing the modal, either by submitting, or by clicking with the close icon */''}
-    
+    ${/* NB: changing the repeat pattern will clear out the event array, so a date must be replaced before closing the modal by submitting, or by clicking the close icon */''}
+
     <label>repeat pattern: ${superuser ? '(enabled for superuser. beware changing this without updating!)' : variant === 'add' ? '' : '(delete event and re-create to change)'}<br>
     <select ${(variant === 'add' || superuser) ? '' : 'disabled'} class="form-control selectRepeat" name="repeat">
     <option ${this.model.get('repeat') === 'annual' ? 'selected' : ''} value="annual">Same Date Annually</option>

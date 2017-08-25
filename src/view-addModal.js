@@ -9,6 +9,8 @@ const AddModal = Backbone.View.extend({
   },
   updateAddView() {
     this.$el.find('.modal-body').html('');
+
+    // populate EditView with 'add' variant of EventModel
     this.$el.find('.modal-body').append(new EditView({
       model: new EventModel({}),
       variant: 'add'

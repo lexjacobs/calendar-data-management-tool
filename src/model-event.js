@@ -24,10 +24,10 @@ export const EventModel = Backbone.Model.extend({
   },
   mapTimingFromAttributeToCollection() {
 
-    // map to transform persisted 'timing' array
+    // map to transform model attribute 'timing' array
     // into a Backbone Collection, with
-    // mapped date strings => objects, as above
-    // NOT saving in attributes, but as a property
+    // mapped [date strings] => objects, as above in comment
+    // NOT saving as a model attribute, but as a property on the object
     this.timing = new Backbone.Collection(this.get('timing').map(x => this.timingMapper(x, this.get('repeat'))));
   },
   defaults: {
@@ -59,6 +59,8 @@ export const EventModel = Backbone.Model.extend({
     this.set('timing', this.serializeTiming(this.timing.models, this.get('repeat')));
     this.trigger('change', this);
   },
+
+  // triggered by view-edit.js
   removeTimingByIndex(index) {
 
     // don't remove nonexistent models
@@ -70,6 +72,7 @@ export const EventModel = Backbone.Model.extend({
 EventModel.prototype.timingMapper = timingMapper;
 EventModel.prototype.serializeTiming = serializeTiming;
 
+// convert from model such as {y:2016, m:3, d:2} => ['2016-3-2']
 export function serializeTiming(model, repeat) {
   if (repeat === 'annual') {
     return model.map(x => {
@@ -89,6 +92,7 @@ export function serializeTiming(model, repeat) {
   }
 }
 
+// convert from array such as ['3-2'] => {m:3, d:2}
 export function timingMapper(dateString, repeat) {
 
   // map a month, day, year

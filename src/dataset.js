@@ -1,6 +1,11 @@
-// IMPORTANT: year-month-day OR month-day OR month!!!
 import { annual, banner, bars, full, variable } from './constants';
 import { Firebase } from './firebase';
+
+// Database seed for development purposes
+// loaded by uncommenting line 5 in collection-database.js
+
+// IMPORTANT: timing boxes populated with
+// ONLY year-month-day OR month-day OR month
 
 const bannerEvents = [
   {
@@ -210,13 +215,15 @@ const variableEvents = [
   },
 ];
 
+// combine sections above
 const dataset = [].concat(bannerEvents).concat(annualEvents).concat(variableEvents).map(x => {
 
-  // make it clear if database gets hydrated from dataset
+  // make it clear if database gets hydrated from sample dataset
   x.text = `TEST ${x.text}`;
   return x;
 });
 
+// hydrate firebase database
 var events = Firebase.database().ref('events');
 events.set(dataset);
 

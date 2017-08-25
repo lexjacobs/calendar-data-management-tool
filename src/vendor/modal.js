@@ -1,4 +1,7 @@
-/* eslint-disable  no-unused-expressions */
+/* eslint-disable no-unused-expressions */
+
+// imported into project directly so that line 12 could be added
+// which allowed immediate compatibility with webpack
 
 /* ========================================================================
  * Bootstrap: modal.js v3.3.7
