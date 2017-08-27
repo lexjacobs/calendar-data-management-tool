@@ -24,6 +24,12 @@ export const EventsView = Backbone.View.extend({
     this.render();
     this.listenTo(this.collection, 'updateEditModal', this.handleUpdateEventModal);
   },
+  onClose() {
+    this.filterChooser.close();
+    this.individualEventBlock.close();
+    this.editModal.close();
+    this.addModal.close();
+  },
   render() {
     this.$el.html('');
     this.$el.append(addNewEventButton());
@@ -46,9 +52,13 @@ export const EventsView = Backbone.View.extend({
 
 const IndividualEventBlock = Backbone.View.extend({
   initialize() {
+    this.individualEventReference = [];
     this.listenTo(this.collection, 'updated', this.render);
     this.listenTo(this.model, 'change', this.render);
     this.render();
+  },
+  onClose() {
+    this.clearEventReferences();
   },
   events: {
     'click .back-to-top': 'backToTop'
@@ -84,16 +94,29 @@ const IndividualEventBlock = Backbone.View.extend({
     // otherwise just filter by current filter selection
     return collection.where(this.model.get('filter'));
   },
+  clearEventReferences() {
+    if (this.individualEventReference.length) {
+      this.individualEventReference.forEach(function(x) {x.close();});
+    }
+    this.individualEventReference = [];
+  },
   render() {
+    this.clearEventReferences();
+
     this.$el.html('');
     this.renderSpinner();
 
     // most recent entry first
     this.filterCollection(this.collection).reverse().forEach(function(x) {
-      this.$el.append(new IndividualEvent({
+
+      let newEvent = new IndividualEvent({
         model: x,
         collection: this.collection
-      }).el);
+      });
+
+      this.individualEventReference.push(newEvent);
+
+      this.$el.append(newEvent.el);
     }, this);
     this.addAddButton();
     return this;

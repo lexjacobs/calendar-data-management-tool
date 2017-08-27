@@ -23,6 +23,10 @@ export const SortView = Backbone.View.extend({
       this.redrawSortedViews();
     }, this);
   },
+  onClose() {
+    this.datePicker.close();
+    this.sortedViews.close();
+  },
   render() {
     this.$el.append(this.datePicker.el);
     this.$el.append(this.sortedViews.el);
@@ -44,6 +48,9 @@ const SortedViews = Backbone.View.extend({
   initialize() {
     this.resetCounterVariables();
     this.render();
+  },
+  onClose() {
+    this.$el.html('');
   },
   resetCounterVariables() {
     this.COUNT = 0;

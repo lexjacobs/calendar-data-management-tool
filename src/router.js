@@ -6,18 +6,25 @@ import { AlternateView } from './view-alternate';
 import AllEvents from './transformAllEvents';
 import { Login } from './view-login';
 
+Backbone.View.prototype.close = function(){
+  this.remove();
+  this.unbind();
+  if (this.onClose){
+    this.onClose();
+  }
+};
+
 var ViewManager = {
   currentView : null,
   showView : function(view, ...extras) {
-    if (this.currentView !== null && this.currentView.cid !== view.cid) {
-      this.currentView.stopListening();
-      this.currentView.remove();
+    if (this.currentView !== null) {
+      this.currentView.close();
     }
-    this.currentView = view;
-
-    return new view({
+    this.currentView = new view({
       routeParameters: extras
-    }).el;
+    });
+
+    return this.currentView.el;
   }
 };
 
@@ -42,7 +49,6 @@ const ApplicationRouter = Backbone.Router.extend({
   allEvents() {
     $('#root').html(ViewManager.showView(AllEvents));
     $('ul.nav-pills > li').removeClass('active');
-    // $('ul.nav-pills > li.nav-item.sort').addClass('active');
     this.navigate("#/allEvents", {trigger: false, replace: true});
   },
 
