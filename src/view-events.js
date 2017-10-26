@@ -164,6 +164,7 @@ const IndividualEvent = Backbone.View.extend({
     presidential proclamation: ${this.model.get('proclamation')}<br>
     starts previous sundown: ${this.model.get('previousSundown')}<br>
     skip counting school day: ${this.model.get('skipCount')}<br>
+    notes: ${this.model.get('notes')}<br>
     `);
     return this;
   }

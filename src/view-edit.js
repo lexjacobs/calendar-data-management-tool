@@ -44,8 +44,8 @@ const EditBlock = Backbone.View.extend({
     this.model.mapTimingFromAttributeToCollection();
     this.renderTimingBlocks();
   },
-  checkForAnyDates(arr) {
-    return arr.length > 0;
+  lackingAnyDates(arr) {
+    return arr.length <= 0;
   },
   composeEventUpdate() {
     let timingResult = [];
@@ -54,7 +54,7 @@ const EditBlock = Backbone.View.extend({
     let formResult = serializedObject(this.$el.find('.editBlock').serializeArray());
 
     // if attempting to submit/edit without at least 1 date
-    if(!this.checkForAnyDates(timingResult)) {
+    if(this.lackingAnyDates(timingResult)) {
       $('#editModal').scrollTop(0);
       $('#addModal').scrollTop(0);
       $('.add-new-date-label').addClass('background-red');
@@ -145,6 +145,10 @@ const EditBlock = Backbone.View.extend({
         <option ${this.model.get('skipCount') === 'no' ? 'selected' : ''} value="no">no</option>
         <option ${this.model.get('skipCount') === 'yes' ? 'selected' : ''} value="yes">yes</option>
       </select>
+    </label><br>
+
+    <label>notes:<br>
+      <textarea placeholder="Record helpful notes here, if any" class="event-notes" name="notes" rows="3" cols="70" type="text-box">${this.model.get('notes')}</textarea>
     </label><br>
 
     <br>

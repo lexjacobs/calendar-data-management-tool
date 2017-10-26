@@ -29,6 +29,13 @@ export const Database = Backbone.Collection.extend({
     this.integrityCheck()
       .then(x => {
         if (+x.val() === +sessionStorage.getItem('currentVersion')) {
+
+          // use this to remove an attribute if needed
+          // this.models = this.models.map(x => {
+          //   delete x.attributes.notes;
+          //   return x;
+          // });
+
           events.set(this.toJSON());
           this.trigger('updated');
         } else {
