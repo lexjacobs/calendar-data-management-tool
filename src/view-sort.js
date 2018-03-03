@@ -204,7 +204,7 @@ export const DatePicker = Backbone.View.extend({
     <label>Number of school days
     <input required type="number" min="1" value="" name="count"></label><br>
 
-    <button class='btn num-button' type='submit'>draw sorted list</button>
+    <button class='btn btn-primary' type='submit'>draw sorted list</button>
     <br><br>
     </form>`);
     return this;
